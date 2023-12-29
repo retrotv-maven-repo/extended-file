@@ -162,8 +162,8 @@ class ExtendedFile : File {
      * @param fileHash 파일 해시 알고리즘
      * @return 파일의 해시 코드
      */
-    @Throws(IOException::class)
     @JvmOverloads
+    @Throws(IOException::class)
     fun getHashCode(fileHash: FileHash = SHA256()): String {
         return fileHash.hash(this)
     }

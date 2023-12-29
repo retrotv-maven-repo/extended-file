@@ -3,6 +3,7 @@ package dev.retrotv
 import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class KotlinFileTest {
@@ -22,5 +23,6 @@ class KotlinFileTest {
         assertFalse(file.isImage())
         assertTrue(file.matchesDeep(file2))
         assertTrue(file.matches(file2))
+        assertNotNull(file.getHashCode())
     }
 }
