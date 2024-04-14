@@ -1,4 +1,4 @@
-package dev.retrotv
+package dev.retrotv.file
 
 import java.util.*
 import kotlin.test.Test

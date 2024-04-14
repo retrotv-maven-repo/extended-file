@@ -1,4 +1,4 @@
-package dev.retrotv
+package dev.retrotv.file
 
 import dev.retrotv.crypto.owe.hash.FileHash
 import dev.retrotv.crypto.owe.hash.sha.SHA256
