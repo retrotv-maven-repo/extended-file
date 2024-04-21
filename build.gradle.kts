@@ -18,12 +18,14 @@ repositories {
     maven { setUrl("https://jitpack.io") }
 }
 
-dependencies {
-    implementation("com.github.retrotv-maven-repo:cryptography:0.21.0-alpha")
-    implementation("com.github.retrotv-maven-repo:data-utils:0.13.2-alpha")
+val tika = "2.9.3"
 
-    implementation("org.apache.tika:tika-core:2.9.1")
-    implementation("org.apache.tika:tika-parsers:2.9.1")
+dependencies {
+    implementation("com.github.retrotv-maven-repo:cryptography:0.23.0-alpha")
+    implementation("com.github.retrotv-maven-repo:data-utils:0.15.0-alpha")
+
+    implementation("org.apache.tika:tika-core:${tika}")
+    implementation("org.apache.tika:tika-parsers:${tika}")
 
     testImplementation(kotlin("test"))
 }
