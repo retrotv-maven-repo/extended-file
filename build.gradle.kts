@@ -1,12 +1,12 @@
 plugins {
     java
-    kotlin("jvm") version "1.9.21"
+    kotlin("jvm") version "1.9.23"
     `maven-publish`
-    id("org.jetbrains.dokka") version "1.9.10"
+    id("org.jetbrains.dokka") version "1.9.20"
 }
 
 group = "dev.retrotv"
-version = "0.2.0-alpha"
+version = "0.2.1-alpha"
 
 // Github Action 버전 출력용
 tasks.register("printVersionName") {
@@ -18,11 +18,11 @@ repositories {
     maven { setUrl("https://jitpack.io") }
 }
 
-val tika = "2.9.3"
+val tika = "2.9.2"
 
 dependencies {
     implementation("com.github.retrotv-maven-repo:cryptography:0.23.0-alpha")
-    implementation("com.github.retrotv-maven-repo:data-utils:0.15.0-alpha")
+    implementation("com.github.retrotv-maven-repo:data-utils:0.16.0-alpha")
 
     implementation("org.apache.tika:tika-core:${tika}")
     implementation("org.apache.tika:tika-parsers:${tika}")
