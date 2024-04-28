@@ -26,6 +26,7 @@ dependencies {
 
     implementation("org.apache.tika:tika-core:${tika}")
     implementation("org.apache.tika:tika-parsers:${tika}")
+    implementation("org.apache.tika:tika-parsers-standard-package:${tika}")
 
     testImplementation(kotlin("test"))
 }
