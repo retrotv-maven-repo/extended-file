@@ -19,6 +19,7 @@ repositories {
 }
 
 val tika = "2.9.2"
+val poi = "5.2.5"
 
 dependencies {
     implementation("com.github.retrotv-maven-repo:cryptography:0.23.0-alpha")
@@ -27,6 +28,9 @@ dependencies {
     implementation("org.apache.tika:tika-core:${tika}")
     implementation("org.apache.tika:tika-parsers:${tika}")
     implementation("org.apache.tika:tika-parsers-standard-package:${tika}")
+
+    implementation("org.apache.poi:poi-ooxml:${poi}")
+    implementation("org.apache.poi:poi:${poi}")
 
     testImplementation(kotlin("test"))
 }
