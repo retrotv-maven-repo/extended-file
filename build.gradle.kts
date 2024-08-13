@@ -78,8 +78,12 @@ kotlin {
 
 tasks.jacocoTestReport {
     reports {
+
+        // HTML 파일을 생성하도록 설정
         html.required = true
-        xml.required = false
+
+        // SonarQube에서 Jacoco XML 파일을 읽을 수 있도록 설정
+        xml.required = true
         csv.required = false
     }
 
