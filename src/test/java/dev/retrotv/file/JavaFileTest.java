@@ -1,5 +1,6 @@
 package dev.retrotv.file;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -7,13 +8,24 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Objects;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 class JavaFileTest {
-    private final URL TEXT_FILE = this.getClass().getClassLoader().getResource("text_file");
+    private final URL textFile = this.getClass().getClassLoader().getResource("text_file");
+    private final URL textFileCopy = this.getClass().getClassLoader().getResource("text_file_copy");
 
     @Test
-    void test_file() throws URISyntaxException, IOException {
-        ExtendedFile ef = new ExtendedFile(Objects.requireNonNull(TEXT_FILE).toURI());
-        System.out.println(ef.getMimeType());
-        System.out.println(ef.matches(ef));
+    @DisplayName("getFileHash() 메소드 테스트")
+    void test_getFileHash() throws IOException, URISyntaxException {
+        ExtendedFile file = new ExtendedFile(Objects.requireNonNull(textFile).toURI());
+        assertNotNull(file.getFileHash());
+    }
+
+    @Test
+    @DisplayName("matches() 메소드 테스트")
+    void test_matches() throws IOException, URISyntaxException {
+        ExtendedFile file = new ExtendedFile(Objects.requireNonNull(textFile).toURI());
+        ExtendedFile file2 = new ExtendedFile(Objects.requireNonNull(textFileCopy).toURI());
+        assertNotNull(file.matches(file2));
     }
 }

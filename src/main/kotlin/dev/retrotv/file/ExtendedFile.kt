@@ -56,9 +56,7 @@ class ExtendedFile : File {
      * @return 파일의 MIME type
      */
     @Throws(IOException::class)
-    fun getMimeType(): String {
-        return tika.detect(this)
-    }
+    fun getMimeType(): String = tika.detect(this)
 
     /**
      * 파일의 유형이 이미지인지 여부를 반환합니다.
@@ -67,9 +65,7 @@ class ExtendedFile : File {
      * @return 이미지 파일인지 여부
      */
     @Throws(IOException::class)
-    fun isImage(): Boolean {
-        return getMimeType().startsWith("image/")
-    }
+    fun isImage(): Boolean = getMimeType().startsWith("image/")
 
     /**
      * 파일의 유형이 텍스트인지 여부를 반환합니다.
@@ -78,9 +74,7 @@ class ExtendedFile : File {
      * @return 텍스트 파일인지 여부
      */
     @Throws(IOException::class)
-    fun isText(): Boolean {
-        return getMimeType().startsWith("text/")
-    }
+    fun isText(): Boolean = getMimeType().startsWith("text/")
 
     /**
      * 파일의 유형이 오디오인지 여부를 반환합니다.
@@ -89,9 +83,7 @@ class ExtendedFile : File {
      * @return 오디오 파일인지 여부
      */
     @Throws(IOException::class)
-    fun isAudio(): Boolean {
-        return getMimeType().startsWith("audio/")
-    }
+    fun isAudio(): Boolean = getMimeType().startsWith("audio/")
 
     /**
      * 파일의 유형이 비디오인지 여부를 반환합니다.
@@ -100,9 +92,7 @@ class ExtendedFile : File {
      * @return 비디오 파일인지 여부
      */
     @Throws(IOException::class)
-    fun isVideo(): Boolean {
-        return getMimeType().startsWith("video/")
-    }
+    fun isVideo(): Boolean = getMimeType().startsWith("video/")
 
     /**
      * 파일의 유형이 지정한 파일 유형인지 여부를 반환합니다.
@@ -112,9 +102,7 @@ class ExtendedFile : File {
      * @return 지정한 파일 유형인지 여부
      */
     @Throws(IOException::class)
-    fun matchesMimeType(mimeType: String): Boolean {
-        return getMimeType() == mimeType
-    }
+    fun matchesMimeType(mimeType: String): Boolean = getMimeType() == mimeType
 
     /**
      * 파일의 해시 코드를 생성해서, 동일한 파일인지 여부를 반환합니다.
@@ -127,9 +115,7 @@ class ExtendedFile : File {
      */
     @JvmOverloads
     @Throws(IOException::class)
-    fun matches(file: File, fileHash: FileHash = SHA256()): Boolean {
-        return fileHash.matches(this, file)
-    }
+    fun matches(file: File, fileHash: FileHash = SHA256()): Boolean = fileHash.matches(this, file)
 
     /**
      * 파일을 처음부터 끝까지 읽어서, 동일한 파일인지 여부를 반환합니다.
@@ -164,7 +150,5 @@ class ExtendedFile : File {
      */
     @JvmOverloads
     @Throws(IOException::class)
-    fun getHashCode(fileHash: FileHash = SHA256()): String {
-        return fileHash.hash(this)
-    }
+    fun getFileHash(fileHash: FileHash = SHA256()): String = fileHash.hash(this)
 }
