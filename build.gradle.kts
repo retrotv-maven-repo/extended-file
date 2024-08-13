@@ -13,7 +13,7 @@ jacoco {
 }
 
 group = "dev.retrotv"
-version = "0.2.1-alpha"
+version = "0.3.0-alpha"
 
 // Github Action 버전 출력용
 tasks.register("printVersionName") {
