@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class JavaFileTest {
     private final URL textFile = this.getClass().getClassLoader().getResource("text_file");
@@ -26,6 +27,6 @@ class JavaFileTest {
     void test_matches() throws IOException, URISyntaxException {
         ExtendedFile file = new ExtendedFile(Objects.requireNonNull(textFile).toURI());
         ExtendedFile file2 = new ExtendedFile(Objects.requireNonNull(textFileCopy).toURI());
-        assertNotNull(file.matches(file2));
+        assertTrue(file.matches(file2));
     }
 }
