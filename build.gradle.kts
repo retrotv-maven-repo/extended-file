@@ -160,9 +160,7 @@ sonar {
         property("sonar.organization", "retrotv-maven-repo")
         property("sonar.host.url", "https://sonarcloud.io")
         property("sonar.sourceEncoding", "UTF-8")
-        property("sonar.language", "Kotlin")
         property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
-        property("sonar.test.inclusions", "**/*Test.java")
         property("sonar.java.coveragePlugin", "jacoco")
     }
 }
