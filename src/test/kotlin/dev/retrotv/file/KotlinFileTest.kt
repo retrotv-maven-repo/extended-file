@@ -127,7 +127,7 @@ class KotlinFileTest {
         fun test_getFileSize_humanReadable() {
             val file = ExtendedFile(Objects.requireNonNull(textFile).toURI())
             assertNotNull(file.getFileSize(false))
-            assertEquals("18", file.getFileSize())
+            assertEquals("18", file.getFileSize(false))
         }
     }
 }
