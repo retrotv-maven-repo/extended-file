@@ -1,6 +1,7 @@
 # ExtendedFile
+기존 Java의 java.io.File 객체를 확장한 파일 객체 라이브러리 입니다.  
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=retrotv-maven-repo_extended-file&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=retrotv-maven-repo_extended-file)  
 [![](https://jitpack.io/v/retrotv-maven-repo/extended-file.svg)](https://jitpack.io/#retrotv-maven-repo/extended-file)  
-기존 Java의 java.io.File 객체를 확장한 파일 객체 라이브러리 입니다.
 ## 지원 JDK
 JDK 1.8 이상
 ## 기존 File 대비 추가된 기능들
