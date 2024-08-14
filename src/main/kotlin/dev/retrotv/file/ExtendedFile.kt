@@ -154,7 +154,7 @@ class ExtendedFile : File {
     @Throws(IOException::class)
     fun getFileHash(fileHash: FileHash = SHA256()): String = fileHash.hash(this)
 
-    // BEGIN-NOSCAN
+    // START-NOSCAN
     @JvmOverloads
     fun getFileSize(isHumanReadable: Boolean = true): String {
         val fileSize = this.length()
