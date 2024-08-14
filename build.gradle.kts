@@ -159,5 +159,7 @@ sonar {
         property("sonar.projectKey", "retrotv-maven-repo_extended-file")
         property("sonar.organization", "retrotv-maven-repo")
         property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.sourceEncoding", "UTF-8")
+        property("sonar.sources", "src")
     }
 }
