@@ -2,7 +2,7 @@ name: SonarCloud analysis
 
 on:
   push:
-    branches: [ "main", "deploy" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
@@ -11,15 +11,39 @@ permissions:
   pull-requests: read
 
 jobs:
-  Analysis:
+  test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java-version: [ 8 ]
     steps:
-      - name: Analyze with SonarCloud
-        uses: SonarSource/sonarcloud-github-action@4006f663ecaf1f8093e8e4abb9227f6041f52216
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
         with:
-          args:
-            -Dsonar.projectKey=retrotv-maven-repo_extended-file
-            -Dsonar.organization=retrotv-maven-repo
-          projectBaseDir: .
+          java-version: ${{ matrix.java-version }}
+          distribution: 'adopt'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: check
+          cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
+
+      - name: SonarCloud scan
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew sonar --info --stacktrace
