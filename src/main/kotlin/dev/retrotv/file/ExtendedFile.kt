@@ -155,6 +155,13 @@ class ExtendedFile : File {
     fun getFileHash(fileHash: FileHash = SHA256()): String = fileHash.hash(this)
 
     // START-NOSCAN
+    /**
+     * 파일의 크기를 반환합니다.
+     * isHumanReadable 매개변수를 true일 경우, 사람이 읽기 쉬운 형태로 반환합니다. (ex. 1.23 MB)
+     *
+     * @param isHumanReadable 사람이 읽기 쉬운 형태로 반환할지 여부 (기본 값: true)
+     * @return 파일의 크기
+     */
     @JvmOverloads
     fun getFileSize(isHumanReadable: Boolean = true): String {
         val fileSize = this.length()
