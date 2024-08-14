@@ -94,8 +94,5 @@ sonar {
         property("sonar.projectKey", "retrotv-maven-repo_extended-file")
         property("sonar.organization", "retrotv-maven-repo")
         property("sonar.host.url", "https://sonarcloud.io")
-        property("sonar.issue.ignore.block", "noscan")
-        property("sonar.issue.ignore.block.noscan.beginBlockRegexp", "// START-NOSCAN")
-        property("sonar.issue.ignore.block.noscan.endBlockRegexp", "// END-NOSCAN")
     }
 }
