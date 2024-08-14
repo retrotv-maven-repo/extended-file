@@ -95,11 +95,11 @@ tasks.jacocoTestCoverageVerification {
     violationRules {
         rule {
 
-            // 'element'가 없으면 프로젝트의 전체 파일을 합친 값을 기준으로 한다.
+            // "element"가 없으면 프로젝트의 전체 파일을 합친 값을 기준으로 한다.
             limit {
 
-                // 'counter'를 지정하지 않으면 default는 'INSTRUCTION'
-                // 'value'를 지정하지 않으면 default는 'COVEREDRATIO'
+                // "counter"를 지정하지 않으면 default는 "INSTRUCTION"
+                // "value"를 지정하지 않으면 default는 "COVEREDRATIO"
                 minimum = "0.80".toBigDecimal()
             }
         }
@@ -152,4 +152,16 @@ val testCoverage by tasks.registering {
 
     tasks["jacocoTestReport"].mustRunAfter(tasks["test"])
     tasks["jacocoTestCoverageVerification"].mustRunAfter(tasks["jacocoTestReport"])
+}
+
+sonar {
+    properties {
+        property("sonar.projectKey", "retrotv-maven-repo_extended-file")
+        property("sonar.organization", "retrotv-maven-repo")
+        property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
+        property("sonar.sources", "src")
+        property("sonar.language", "java")
+        property("sonar.sourceEncoding", "UTF-8")
+    }
 }
