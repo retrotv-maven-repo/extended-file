@@ -7,6 +7,8 @@ import java.io.File
 import java.io.IOException
 import java.net.URI
 import java.nio.file.Files
+import java.text.DecimalFormat
+import kotlin.math.pow
 
 /**
  * [File] 클래스의 기능을 확장한 클래스 입니다.
@@ -151,4 +153,29 @@ class ExtendedFile : File {
     @JvmOverloads
     @Throws(IOException::class)
     fun getFileHash(fileHash: FileHash = SHA256()): String = fileHash.hash(this)
+
+    @JvmOverloads
+    fun getFileSize(isHumanReadable: Boolean = true): String {
+        val fileSize = this.length()
+        return if (isHumanReadable) {
+            val suffix = when {
+                fileSize < 1024 -> "Byte"
+                fileSize < 1024 * 1024 -> "KB"
+                fileSize < 1024 * 1024 * 1024 -> "MB"
+                else -> "GB"
+            }
+
+            val newFileSize = when {
+                fileSize < 1024 -> fileSize
+                fileSize < 1024 * 1024 -> fileSize / 1024.0
+                fileSize < 1024 * 1024 * 1024 -> fileSize / 1024.0.pow(2)
+                else -> fileSize / 1024.0.pow(3)
+            }
+
+            val df = DecimalFormat("###.##")
+            df.format(newFileSize) + " " + suffix
+        } else {
+            fileSize.toString()
+        }
+    }
 }

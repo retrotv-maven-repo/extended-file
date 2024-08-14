@@ -4,10 +4,7 @@ import dev.retrotv.crypto.owe.hash.sha.SHA512
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import java.util.*
-import kotlin.test.Test
-import kotlin.test.assertFalse
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 class KotlinFileTest {
     private val textFile = this.javaClass.getClassLoader().getResource("text_file")
@@ -110,6 +107,27 @@ class KotlinFileTest {
             val file = ExtendedFile(Objects.requireNonNull(textFile).toURI())
             val file2 = ExtendedFile(Objects.requireNonNull(textFileDifferent).toURI())
             assertFalse(file.matchesDeep(file2))
+        }
+    }
+
+    @Nested
+    @DisplayName("getFileSize() 메소드 테스트")
+    inner class GetFileSizeTest {
+
+        @Test
+        @DisplayName("파일 크기 반환 (사람이 읽기 쉬운 형태)")
+        fun test_getFileSize() {
+            val file = ExtendedFile(Objects.requireNonNull(textFile).toURI())
+            assertNotNull(file.getFileSize())
+            assertEquals("18 Byte", file.getFileSize())
+        }
+
+        @Test
+        @DisplayName("파일 크기 반환")
+        fun test_getFileSize_humanReadable() {
+            val file = ExtendedFile(Objects.requireNonNull(textFile).toURI())
+            assertNotNull(file.getFileSize(false))
+            assertEquals("18", file.getFileSize())
         }
     }
 }
