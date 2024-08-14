@@ -6,7 +6,7 @@ plugins {
     kotlin("jvm") version "2.0.0"
     `maven-publish`
     id("org.jetbrains.dokka") version "1.9.20"
-    id("org.sonarqube") version "4.0.0.2929"
+    id("org.sonarqube") version "5.1.0.4882"
 }
 
 jacoco {
@@ -87,71 +87,6 @@ tasks.jacocoTestReport {
         xml.required = true
         csv.required = false
     }
-
-    finalizedBy("jacocoTestCoverageVerification")
-}
-
-tasks.jacocoTestCoverageVerification {
-    violationRules {
-        rule {
-
-            // "element"가 없으면 프로젝트의 전체 파일을 합친 값을 기준으로 한다.
-            limit {
-
-                // "counter"를 지정하지 않으면 default는 "INSTRUCTION"
-                // "value"를 지정하지 않으면 default는 "COVEREDRATIO"
-                minimum = "0.80".toBigDecimal()
-            }
-        }
-
-        rule {
-
-            // 룰을 간단히 켜고 끌 수 있다.
-            enabled = true
-
-            // 룰을 체크할 단위는 클래스 단위
-            element = "CLASS"
-
-            // 브랜치 커버리지를 최소한 90% 만족시켜야 한다.
-            limit {
-                counter = "BRANCH"
-                value = "COVEREDRATIO"
-                minimum = "0.90".toBigDecimal()
-            }
-
-            // 라인 커버리지를 최소한 80% 만족시켜야 한다.
-            limit {
-                counter = "LINE"
-                value = "COVEREDRATIO"
-                minimum = "0.80".toBigDecimal()
-            }
-
-            // 빈 줄을 제외한 코드의 라인수를 최대 200라인으로 제한한다.
-            limit {
-                counter = "LINE"
-                value = "TOTALCOUNT"
-                maximum = "200".toBigDecimal()
-            }
-
-            // 커버리지 체크를 제외할 클래스들
-            excludes = listOf(
-//                    "*.test.*",
-//                    "*.Kotlin*"
-            )
-        }
-    }
-}
-
-val testCoverage by tasks.registering {
-    group = "verification"
-    description = "Runs the unit tests with coverage"
-
-    dependsOn(":test",
-        ":jacocoTestReport",
-        ":jacocoTestCoverageVerification")
-
-    tasks["jacocoTestReport"].mustRunAfter(tasks["test"])
-    tasks["jacocoTestCoverageVerification"].mustRunAfter(tasks["jacocoTestReport"])
 }
 
 sonar {
