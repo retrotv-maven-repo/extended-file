@@ -6,7 +6,7 @@ plugins {
     kotlin("jvm") version "2.0.0"
     `maven-publish`
     id("org.jetbrains.dokka") version "1.9.20"
-    id("org.sonarqube") version "5.1.0.4882"
+    id("org.sonarqube") version "4.0.0.2929"
 }
 
 jacoco {
@@ -14,7 +14,7 @@ jacoco {
 }
 
 group = "dev.retrotv"
-version = "0.5.0-alpha"
+version = "0.5.1-alpha"
 
 // Github Action 버전 출력용
 tasks.register("printVersionName") {
