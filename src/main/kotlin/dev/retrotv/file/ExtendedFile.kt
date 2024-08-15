@@ -52,6 +52,34 @@ class ExtendedFile : File {
     constructor(uri: URI) : super(uri)
 
     /**
+     * 파일 확장자를 반환합니다.
+     *
+     * @return 파일 확장자
+     */
+    fun getExtension(): String {
+        val extension = this.name.substringAfter('.')
+        if (this.name == extension) {
+            return ""
+        }
+
+        return extension
+    }
+
+    /**
+     * 파일명을 반환합니다.
+     *
+     * @param isRemoveExtension 확장자 제거 여부
+     * @return 파일명
+     */
+    fun getName(isRemoveExtension: Boolean): String {
+        return if (!isRemoveExtension) {
+            this.name
+        } else {
+            this.name.replace(".${this.getExtension()}", "")
+        }
+    }
+
+    /**
      * 파일의 MIME type을 반환합니다.
      *
      * @throws IOException 파일을 읽을 수 없는 경우 던져짐
@@ -152,10 +180,17 @@ class ExtendedFile : File {
      */
     @JvmOverloads
     @Throws(IOException::class)
-    fun getFileHash(fileHash: FileHash = SHA256()): String = fileHash.hash(this)
+    fun getHash(fileHash: FileHash = SHA256()): String = fileHash.hash(this)
 
+    /**
+     * 파일의 크기를 반환합니다.
+     * isHumanReadable 매개변수를 true일 경우, 사람이 읽기 쉬운 형태로 반환합니다. (ex. 1.23 MB)
+     *
+     * @param isHumanReadable 사람이 읽기 쉬운 형태로 반환할지 여부 (기본 값: true)
+     * @return 파일의 크기
+     */
     @JvmOverloads
-    fun getFileSize(isHumanReadable: Boolean = true): String {
+    fun getSize(isHumanReadable: Boolean = true): String {
         val fileSize = this.length()
         return if (isHumanReadable) {
             val suffix = when {

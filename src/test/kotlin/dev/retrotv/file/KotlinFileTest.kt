@@ -3,6 +3,7 @@ package dev.retrotv.file
 import dev.retrotv.crypto.owe.hash.sha.SHA512
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
+import java.net.URISyntaxException
 import java.util.*
 import kotlin.test.*
 
@@ -10,6 +11,9 @@ class KotlinFileTest {
     private val textFile = this.javaClass.getClassLoader().getResource("text_file")
     private val textFileCopy = this.javaClass.getClassLoader().getResource("text_file_copy")
     private val textFileDifferent = this.javaClass.getClassLoader().getResource("text_file_different")
+    private val textFileMega = this.javaClass.getClassLoader().getResource("text_file_mega")
+    private val extensionFile = this.javaClass.getClassLoader().getResource("extension.txt")
+    private val extensionFile2 = this.javaClass.getClassLoader().getResource("extension.tar.gz")
 
     @Test
     @DisplayName("getMimeType() 메소드 테스트")
@@ -58,14 +62,14 @@ class KotlinFileTest {
     @DisplayName("getHashCode() 메소드 테스트")
     fun test_getHashCode() {
         val file = ExtendedFile(Objects.requireNonNull(textFile).toURI())
-        assertNotNull(file.getFileHash())
+        assertNotNull(file.getHash())
     }
 
     @Test
     @DisplayName("getHashCode(SHA512()) 메소드 테스트")
     fun test_getHashCode_sha512() {
         val file = ExtendedFile(Objects.requireNonNull(textFile).toURI())
-        assertNotNull(file.getFileHash(SHA512()))
+        assertNotNull(file.getHash(SHA512()))
     }
 
     @Nested
@@ -118,16 +122,53 @@ class KotlinFileTest {
         @DisplayName("파일 크기 반환 (사람이 읽기 쉬운 형태)")
         fun test_getFileSize() {
             val file = ExtendedFile(Objects.requireNonNull(textFile).toURI())
-            assertNotNull(file.getFileSize())
-            assertEquals("18 Byte", file.getFileSize())
+            assertNotNull(file.getSize())
+            assertEquals("18 Byte", file.getSize())
+        }
+
+        @Test
+        @DisplayName("파일 크기 반환 MB (사람이 읽기 쉬운 형태)")
+        fun test_getFileSizeMB() {
+            val file = ExtendedFile(Objects.requireNonNull(textFileMega).toURI())
+            assertNotNull(file.getSize())
+            assertEquals("2.29 MB", file.getSize())
         }
 
         @Test
         @DisplayName("파일 크기 반환")
         fun test_getFileSize_humanReadable() {
             val file = ExtendedFile(Objects.requireNonNull(textFile).toURI())
-            assertNotNull(file.getFileSize(false))
-            assertEquals("18", file.getFileSize(false))
+            assertNotNull(file.getSize(false))
+            assertEquals("18", file.getSize(false))
         }
+    }
+
+    @Test
+    @DisplayName("getExtension() 메소드 테스트")
+    fun test_getExtension() {
+        val file = ExtendedFile(Objects.requireNonNull(extensionFile).toURI())
+        assertEquals("txt", file.getExtension())
+
+        val file2 = ExtendedFile(Objects.requireNonNull(extensionFile2).toURI())
+        assertEquals("tar.gz", file2.getExtension())
+
+        val file3 = ExtendedFile(Objects.requireNonNull(textFile).toURI())
+        assertEquals("", file3.getExtension())
+    }
+
+    @Test
+    @DisplayName("getName() 메소드 테스트")
+    @Throws(URISyntaxException::class)
+    fun test_getName() {
+        val file = ExtendedFile(Objects.requireNonNull(textFile).toURI())
+        assertEquals("text_file", file.name)
+
+        val file2 = ExtendedFile(Objects.requireNonNull(extensionFile).toURI())
+        assertEquals("extension", file2.getName(true))
+        assertEquals("extension.txt", file2.getName(false))
+
+        val file3 = ExtendedFile(Objects.requireNonNull(extensionFile2).toURI())
+        assertEquals("extension", file3.getName(true))
+        assertEquals("extension.tar.gz", file3.getName(false))
     }
 }
