@@ -60,14 +60,14 @@ class KotlinFileTest {
     @DisplayName("getHashCode() 메소드 테스트")
     fun test_getHashCode() {
         val file = ExtendedFile(Objects.requireNonNull(textFile).toURI())
-        assertNotNull(file.getFileHash())
+        assertNotNull(file.getHash())
     }
 
     @Test
     @DisplayName("getHashCode(SHA512()) 메소드 테스트")
     fun test_getHashCode_sha512() {
         val file = ExtendedFile(Objects.requireNonNull(textFile).toURI())
-        assertNotNull(file.getFileHash(SHA512()))
+        assertNotNull(file.getHash(SHA512()))
     }
 
     @Nested
@@ -120,16 +120,16 @@ class KotlinFileTest {
         @DisplayName("파일 크기 반환 (사람이 읽기 쉬운 형태)")
         fun test_getFileSize() {
             val file = ExtendedFile(Objects.requireNonNull(textFile).toURI())
-            assertNotNull(file.getFileSize())
-            assertEquals("18 Byte", file.getFileSize())
+            assertNotNull(file.getSize())
+            assertEquals("18 Byte", file.getSize())
         }
 
         @Test
         @DisplayName("파일 크기 반환")
         fun test_getFileSize_humanReadable() {
             val file = ExtendedFile(Objects.requireNonNull(textFile).toURI())
-            assertNotNull(file.getFileSize(false))
-            assertEquals("18", file.getFileSize(false))
+            assertNotNull(file.getSize(false))
+            assertEquals("18", file.getSize(false))
         }
     }
 

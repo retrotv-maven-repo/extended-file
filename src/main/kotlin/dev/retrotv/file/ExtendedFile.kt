@@ -152,7 +152,7 @@ class ExtendedFile : File {
      */
     @JvmOverloads
     @Throws(IOException::class)
-    fun getFileHash(fileHash: FileHash = SHA256()): String = fileHash.hash(this)
+    fun getHash(fileHash: FileHash = SHA256()): String = fileHash.hash(this)
 
     /**
      * 파일의 크기를 반환합니다.
@@ -162,7 +162,7 @@ class ExtendedFile : File {
      * @return 파일의 크기
      */
     @JvmOverloads
-    fun getFileSize(isHumanReadable: Boolean = true): String {
+    fun getSize(isHumanReadable: Boolean = true): String {
         val fileSize = this.length()
         return if (isHumanReadable) {
             val suffix = when {

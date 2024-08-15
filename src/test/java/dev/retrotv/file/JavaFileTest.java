@@ -19,7 +19,7 @@ class JavaFileTest {
     @DisplayName("getFileHash() 메소드 테스트")
     void test_getFileHash() throws IOException, URISyntaxException {
         ExtendedFile file = new ExtendedFile(Objects.requireNonNull(textFile).toURI());
-        assertNotNull(file.getFileHash());
+        assertNotNull(file.getHash());
     }
 
     @Test
