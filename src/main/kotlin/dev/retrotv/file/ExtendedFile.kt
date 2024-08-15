@@ -154,7 +154,6 @@ class ExtendedFile : File {
     @Throws(IOException::class)
     fun getFileHash(fileHash: FileHash = SHA256()): String = fileHash.hash(this)
 
-    // START-NOSCAN
     /**
      * 파일의 크기를 반환합니다.
      * isHumanReadable 매개변수를 true일 경우, 사람이 읽기 쉬운 형태로 반환합니다. (ex. 1.23 MB)
@@ -186,5 +185,18 @@ class ExtendedFile : File {
             fileSize.toString()
         }
     }
-    // END-NOSCAN
+
+    /**
+     * 파일 확장자를 반환합니다.
+     *
+     * @return 파일 확장자
+     */
+    fun getExtension(): String {
+        val extension = this.name.substringAfter('.')
+        if (this.name == extension) {
+            return ""
+        }
+
+        return extension
+    }
 }

@@ -10,6 +10,8 @@ class KotlinFileTest {
     private val textFile = this.javaClass.getClassLoader().getResource("text_file")
     private val textFileCopy = this.javaClass.getClassLoader().getResource("text_file_copy")
     private val textFileDifferent = this.javaClass.getClassLoader().getResource("text_file_different")
+    private val extensionFile = this.javaClass.getClassLoader().getResource("extension.txt")
+    private val extensionFile2 = this.javaClass.getClassLoader().getResource("extension.tar.gz")
 
     @Test
     @DisplayName("getMimeType() 메소드 테스트")
@@ -129,5 +131,18 @@ class KotlinFileTest {
             assertNotNull(file.getFileSize(false))
             assertEquals("18", file.getFileSize(false))
         }
+    }
+
+    @Test
+    @DisplayName("getExtension() 메소드 테스트")
+    fun test_getExtension() {
+        val file = ExtendedFile(Objects.requireNonNull(extensionFile).toURI())
+        assertEquals("txt", file.getExtension())
+
+        val file2 = ExtendedFile(Objects.requireNonNull(extensionFile2).toURI())
+        assertEquals("tar.gz", file2.getExtension())
+
+        val file3 = ExtendedFile(Objects.requireNonNull(textFile).toURI())
+        assertEquals("", file3.getExtension())
     }
 }
