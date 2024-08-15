@@ -11,6 +11,7 @@ class KotlinFileTest {
     private val textFile = this.javaClass.getClassLoader().getResource("text_file")
     private val textFileCopy = this.javaClass.getClassLoader().getResource("text_file_copy")
     private val textFileDifferent = this.javaClass.getClassLoader().getResource("text_file_different")
+    private val textFileMega = this.javaClass.getClassLoader().getResource("text_file_mega")
     private val extensionFile = this.javaClass.getClassLoader().getResource("extension.txt")
     private val extensionFile2 = this.javaClass.getClassLoader().getResource("extension.tar.gz")
 
@@ -123,6 +124,14 @@ class KotlinFileTest {
             val file = ExtendedFile(Objects.requireNonNull(textFile).toURI())
             assertNotNull(file.getSize())
             assertEquals("18 Byte", file.getSize())
+        }
+
+        @Test
+        @DisplayName("파일 크기 반환 MB (사람이 읽기 쉬운 형태)")
+        fun test_getFileSizeMB() {
+            val file = ExtendedFile(Objects.requireNonNull(textFileMega).toURI())
+            assertNotNull(file.getSize())
+            assertEquals("2.29 MB", file.getSize())
         }
 
         @Test

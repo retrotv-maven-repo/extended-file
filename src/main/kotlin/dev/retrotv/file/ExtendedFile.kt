@@ -52,6 +52,34 @@ class ExtendedFile : File {
     constructor(uri: URI) : super(uri)
 
     /**
+     * 파일 확장자를 반환합니다.
+     *
+     * @return 파일 확장자
+     */
+    fun getExtension(): String {
+        val extension = this.name.substringAfter('.')
+        if (this.name == extension) {
+            return ""
+        }
+
+        return extension
+    }
+
+    /**
+     * 파일명을 반환합니다.
+     *
+     * @param isRemoveExtension 확장자 제거 여부
+     * @return 파일명
+     */
+    fun getName(isRemoveExtension: Boolean): String {
+        return if (!isRemoveExtension) {
+            this.name
+        } else {
+            this.name.replace(".${this.getExtension()}", "")
+        }
+    }
+
+    /**
      * 파일의 MIME type을 반환합니다.
      *
      * @throws IOException 파일을 읽을 수 없는 경우 던져짐
@@ -183,28 +211,6 @@ class ExtendedFile : File {
             df.format(newFileSize) + " " + suffix
         } else {
             fileSize.toString()
-        }
-    }
-
-    /**
-     * 파일 확장자를 반환합니다.
-     *
-     * @return 파일 확장자
-     */
-    fun getExtension(): String {
-        val extension = this.name.substringAfter('.')
-        if (this.name == extension) {
-            return ""
-        }
-
-        return extension
-    }
-
-    fun getName(isRemoveExtension: Boolean): String {
-        return if (!isRemoveExtension) {
-            this.name
-        } else {
-            this.name.replace(".${this.getExtension()}", "")
         }
     }
 }
