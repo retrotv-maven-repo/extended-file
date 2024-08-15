@@ -3,6 +3,7 @@ package dev.retrotv.file
 import dev.retrotv.crypto.owe.hash.sha.SHA512
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
+import java.net.URISyntaxException
 import java.util.*
 import kotlin.test.*
 
@@ -144,5 +145,21 @@ class KotlinFileTest {
 
         val file3 = ExtendedFile(Objects.requireNonNull(textFile).toURI())
         assertEquals("", file3.getExtension())
+    }
+
+    @Test
+    @DisplayName("getName() 메소드 테스트")
+    @Throws(URISyntaxException::class)
+    fun test_getName() {
+        val file = ExtendedFile(Objects.requireNonNull(textFile).toURI())
+        assertEquals("text_file", file.name)
+
+        val file2 = ExtendedFile(Objects.requireNonNull(extensionFile).toURI())
+        assertEquals("extension", file2.getName(true))
+        assertEquals("extension.txt", file2.getName(false))
+
+        val file3 = ExtendedFile(Objects.requireNonNull(extensionFile2).toURI())
+        assertEquals("extension", file3.getName(true))
+        assertEquals("extension.tar.gz", file3.getName(false))
     }
 }

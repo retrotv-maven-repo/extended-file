@@ -199,4 +199,12 @@ class ExtendedFile : File {
 
         return extension
     }
+
+    fun getName(isRemoveExtension: Boolean): String {
+        return if (!isRemoveExtension) {
+            this.name
+        } else {
+            this.name.replace(".${this.getExtension()}", "")
+        }
+    }
 }
