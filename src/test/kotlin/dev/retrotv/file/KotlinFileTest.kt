@@ -136,10 +136,18 @@ class KotlinFileTest {
 
         @Test
         @DisplayName("파일 크기 반환")
-        fun test_getFileSize_humanReadable() {
+        fun test_getFileSize_humanReadableFalse() {
             val file = ExtendedFile(Objects.requireNonNull(textFile).toURI())
             assertNotNull(file.getSize(false))
             assertEquals("18", file.getSize(false))
+        }
+
+        @Test
+        @DisplayName("파일 크기 반환 대용량")
+        fun test_getFileSize_humanReadableFalseMB() {
+            val file = ExtendedFile(Objects.requireNonNull(textFileMega).toURI())
+            assertNotNull(file.getSize(false))
+            assertEquals("2400000", file.getSize(false))
         }
     }
 
