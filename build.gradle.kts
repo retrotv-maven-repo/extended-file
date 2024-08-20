@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     java
     jacoco
-    kotlin("jvm") version "2.0.0"
+    kotlin("jvm") version "2.0.10"
     `maven-publish`
     id("org.jetbrains.dokka") version "1.9.20"
     id("org.sonarqube") version "4.0.0.2929"
@@ -28,7 +28,7 @@ repositories {
     maven { setUrl("https://jitpack.io") }
 }
 
-val cryptography = "0.23.0-alpha"
+val cryptography = "0.30.0-alpha"
 val dataUtils = "0.16.0-alpha"
 val tika = "2.9.2"
 val poi = "5.2.5"
