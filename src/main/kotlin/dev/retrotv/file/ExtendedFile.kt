@@ -1,7 +1,8 @@
 package dev.retrotv.file
 
-import dev.retrotv.crypto.owe.hash.FileHash
-import dev.retrotv.crypto.owe.hash.sha.SHA256
+import dev.retrotv.crypto.enums.EHash.SHA256
+import dev.retrotv.crypto.hash.FileHash
+import dev.retrotv.crypto.hash.Hash
 import org.apache.tika.Tika
 import java.io.File
 import java.io.IOException
@@ -145,7 +146,8 @@ class ExtendedFile : File {
      */
     @JvmOverloads
     @Throws(IOException::class)
-    fun matches(file: File, fileHash: FileHash = SHA256()): Boolean = fileHash.matches(this, file)
+    fun matches(file: File, fileHash: FileHash
+        = Hash.getInstance(SHA256)): Boolean = fileHash.matches(this, fileHash.hash(file))
 
     /**
      * 파일을 처음부터 끝까지 읽어서, 동일한 파일인지 여부를 반환합니다.
@@ -180,7 +182,7 @@ class ExtendedFile : File {
      */
     @JvmOverloads
     @Throws(IOException::class)
-    fun getHash(fileHash: FileHash = SHA256()): String = fileHash.hash(this)
+    fun getHash(fileHash: FileHash = Hash.getInstance(SHA256)): String = fileHash.hash(this)
 
     /**
      * 파일의 크기를 반환합니다.

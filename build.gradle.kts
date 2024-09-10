@@ -14,7 +14,7 @@ jacoco {
 }
 
 group = "dev.retrotv"
-version = "0.5.1-alpha"
+version = "0.5.2-alpha"
 
 // Github Action 버전 출력용
 tasks.register("printVersionName") {
@@ -28,7 +28,7 @@ repositories {
     maven { setUrl("https://jitpack.io") }
 }
 
-val cryptography = "0.30.0-alpha"
+val cryptography = "0.42.10-alpha"
 val dataUtils = "0.16.0-alpha"
 val tika = "2.9.2"
 val poi = "5.2.5"
