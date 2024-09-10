@@ -1,6 +1,7 @@
 package dev.retrotv.file
 
-import dev.retrotv.crypto.owe.hash.sha.SHA512
+import dev.retrotv.crypto.enums.EHash
+import dev.retrotv.crypto.hash.Hash
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import java.net.URISyntaxException
@@ -69,7 +70,7 @@ class KotlinFileTest {
     @DisplayName("getHashCode(SHA512()) 메소드 테스트")
     fun test_getHashCode_sha512() {
         val file = ExtendedFile(Objects.requireNonNull(textFile).toURI())
-        assertNotNull(file.getHash(SHA512()))
+        assertNotNull(file.getHash(Hash.getInstance(EHash.SHA512)))
     }
 
     @Nested
@@ -136,10 +137,18 @@ class KotlinFileTest {
 
         @Test
         @DisplayName("파일 크기 반환")
-        fun test_getFileSize_humanReadable() {
+        fun test_getFileSize_humanReadableFalse() {
             val file = ExtendedFile(Objects.requireNonNull(textFile).toURI())
             assertNotNull(file.getSize(false))
             assertEquals("18", file.getSize(false))
+        }
+
+        @Test
+        @DisplayName("파일 크기 반환 대용량")
+        fun test_getFileSize_humanReadableFalseMB() {
+            val file = ExtendedFile(Objects.requireNonNull(textFileMega).toURI())
+            assertNotNull(file.getSize(false))
+            assertEquals("2400000", file.getSize(false))
         }
     }
 
