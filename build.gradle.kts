@@ -3,14 +3,10 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     java
     jacoco
-    kotlin("jvm") version "2.0.10"
     `maven-publish`
+    kotlin("jvm") version "2.0.10"
     id("org.jetbrains.dokka") version "1.9.20"
     id("org.sonarqube") version "4.0.0.2929"
-}
-
-jacoco {
-    toolVersion = "0.8.12"
 }
 
 group = "dev.retrotv"
