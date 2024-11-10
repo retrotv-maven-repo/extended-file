@@ -4,6 +4,7 @@ import dev.retrotv.crypto.enums.EHash
 import dev.retrotv.crypto.hash.Hash
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Order
 import java.io.IOException
 import java.net.URISyntaxException
 import java.nio.file.Files
@@ -189,15 +190,18 @@ class KotlinFileTest {
     inner class RmTest {
 
         @Test
+        @Order(1)
         @DisplayName("단건 파일 삭제")
         @Throws(IOException::class, SecurityException::class)
         fun test_rm_singleFile() {
             createTestFile()
+
             val file = ExtendedFile("./src/test/resources/delete_test_file")
             assertTrue(file.rm())
         }
 
         @Test
+        @Order(2)
         @DisplayName("빈 디렉토리 삭제")
         @Throws(IOException::class, SecurityException::class)
         fun test_rm_emptyDirectory() {
@@ -208,6 +212,7 @@ class KotlinFileTest {
         }
 
         @Test
+        @Order(3)
         @DisplayName("비어있지 않은 디렉토리 삭제 실패")
         @Throws(IOException::class, SecurityException::class)
         fun test_rm_notEmptyDirectoryFail() {
@@ -219,52 +224,118 @@ class KotlinFileTest {
         }
 
         @Test
+        @Order(4)
         @DisplayName("비어있지 않은 디렉토리 재귀적으로 삭제")
         @Throws(IOException::class, SecurityException::class)
         fun test_rm_notEmptyDirectory() {
             createTestInnerDirectoryAndFile()
 
             val file = ExtendedFile("./src/test/resources/delete_test_directory")
-            assertTrue(file.rm())
+            assertTrue(file.rm(true))
         }
 
         @Throws(IOException::class, SecurityException::class)
         private fun createTestFile() {
             Files.createFile(Paths.get("./src/test/resources/delete_test_file"))
+            val testFile = ExtendedFile("./src/test/resources/delete_test_file")
+            assertTrue(testFile.isFile)
+            assertTrue(testFile.exists())
         }
 
         @Throws(SecurityException::class)
         private fun createTestDirectory() {
             Files.createDirectory(Paths.get("./src/test/resources/delete_test_directory"))
+            val testDirectory = ExtendedFile("./src/test/resources/delete_test_directory")
+            assertTrue(testDirectory.isDirectory)
+            assertTrue(testDirectory.exists())
         }
 
         @Throws(IOException::class, SecurityException::class)
         private fun createTestDirectoryAndFile() {
             Files.createDirectory(Paths.get("./src/test/resources/delete_test_directory"))
+            val testDirectory = ExtendedFile("./src/test/resources/delete_test_directory")
+            assertTrue(testDirectory.isDirectory)
+            assertTrue(testDirectory.exists())
+
             Files.createFile(Paths.get("./src/test/resources/delete_test_directory/delete_test_file"))
+            val testFile = ExtendedFile("./src/test/resources/delete_test_directory/delete_test_file")
+            assertTrue(testFile.isFile)
+            assertTrue(testFile.exists())
         }
 
         @Throws(IOException::class, SecurityException::class)
         private fun removeTestDirectory() {
             val file = ExtendedFile("./src/test/resources/delete_test_directory")
-            file.rm(true)
+            assertTrue(file.exists())
+            assertTrue(file.rm(true))
         }
 
         @Throws(IOException::class, SecurityException::class)
         private fun createTestInnerDirectoryAndFile() {
             Files.createDirectory(Paths.get("./src/test/resources/delete_test_directory"))
+            val testDirectory = ExtendedFile("./src/test/resources/delete_test_directory")
+            assertTrue(testDirectory.isDirectory)
+            assertTrue(testDirectory.exists())
+
             Files.createDirectory(Paths.get("./src/test/resources/delete_test_directory/delete_test_directory"))
+            val testInnerDirectory = ExtendedFile("./src/test/resources/delete_test_directory/delete_test_directory")
+            assertTrue(testInnerDirectory.isDirectory)
+            assertTrue(testInnerDirectory.exists())
+
             Files.createDirectory(Paths.get("./src/test/resources/delete_test_directory/delete_test_directory/delete_test_directory"))
+            val testInnerInnerDirectory = ExtendedFile("./src/test/resources/delete_test_directory/delete_test_directory/delete_test_directory")
+            assertTrue(testInnerInnerDirectory.isDirectory)
+            assertTrue(testInnerInnerDirectory.exists())
+
             Files.createFile(Paths.get("./src/test/resources/delete_test_directory/delete_test_file1"))
+            val testFile1 = ExtendedFile("./src/test/resources/delete_test_directory/delete_test_file1")
+            assertTrue(testFile1.isFile)
+            assertTrue(testFile1.exists())
+
             Files.createFile(Paths.get("./src/test/resources/delete_test_directory/delete_test_file2"))
+            val testFile2 = ExtendedFile("./src/test/resources/delete_test_directory/delete_test_file2")
+            assertTrue(testFile2.isFile)
+            assertTrue(testFile2.exists())
+
             Files.createFile(Paths.get("./src/test/resources/delete_test_directory/delete_test_file3"))
+            val testFile3 = ExtendedFile("./src/test/resources/delete_test_directory/delete_test_file3")
+            assertTrue(testFile3.isFile)
+            assertTrue(testFile3.exists())
+
             Files.createFile(Paths.get("./src/test/resources/delete_test_directory/delete_test_directory/delete_test_file1"))
+            val testInnerFile1 = ExtendedFile("./src/test/resources/delete_test_directory/delete_test_directory/delete_test_file1")
+            assertTrue(testInnerFile1.isFile)
+            assertTrue(testInnerFile1.exists())
+
             Files.createFile(Paths.get("./src/test/resources/delete_test_directory/delete_test_directory/delete_test_file2"))
+            val testInnerFile2 = ExtendedFile("./src/test/resources/delete_test_directory/delete_test_directory/delete_test_file2")
+            assertTrue(testInnerFile2.isFile)
+            assertTrue(testInnerFile2.exists())
+
             Files.createFile(Paths.get("./src/test/resources/delete_test_directory/delete_test_directory/delete_test_directory/delete_test_file1"))
+            val testInnerInnerFile1 = ExtendedFile("./src/test/resources/delete_test_directory/delete_test_directory/delete_test_directory/delete_test_file1")
+            assertTrue(testInnerInnerFile1.isFile)
+            assertTrue(testInnerInnerFile1.exists())
+
             Files.createFile(Paths.get("./src/test/resources/delete_test_directory/delete_test_directory/delete_test_directory/delete_test_file2"))
+            val testInnerInnerFile2 = ExtendedFile("./src/test/resources/delete_test_directory/delete_test_directory/delete_test_directory/delete_test_file2")
+            assertTrue(testInnerInnerFile2.isFile)
+            assertTrue(testInnerInnerFile2.exists())
+
             Files.createFile(Paths.get("./src/test/resources/delete_test_directory/delete_test_directory/delete_test_directory/delete_test_file3"))
+            val testInnerInnerFile3 = ExtendedFile("./src/test/resources/delete_test_directory/delete_test_directory/delete_test_directory/delete_test_file3")
+            assertTrue(testInnerInnerFile3.isFile)
+            assertTrue(testInnerInnerFile3.exists())
+
             Files.createFile(Paths.get("./src/test/resources/delete_test_directory/delete_test_directory/delete_test_directory/delete_test_file4"))
+            val testInnerInnerFile4 = ExtendedFile("./src/test/resources/delete_test_directory/delete_test_directory/delete_test_directory/delete_test_file4")
+            assertTrue(testInnerInnerFile4.isFile)
+            assertTrue(testInnerInnerFile4.exists())
+
             Files.createFile(Paths.get("./src/test/resources/delete_test_directory/delete_test_directory/delete_test_directory/delete_test_file5"))
+            val testInnerInnerFile5 = ExtendedFile("./src/test/resources/delete_test_directory/delete_test_directory/delete_test_directory/delete_test_file5")
+            assertTrue(testInnerInnerFile5.isFile)
+            assertTrue(testInnerInnerFile5.exists())
         }
     }
 }

@@ -8,10 +8,7 @@ import java.io.File
 import java.io.IOException
 import java.net.URI
 import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.Paths
 import java.text.DecimalFormat
-import kotlin.io.path.pathString
 import kotlin.math.pow
 
 /**
@@ -243,48 +240,22 @@ class ExtendedFile : File {
             if (!recursive) {
                 this.delete()
             } else {
-                rmDirectory()
+                rmDirectory(this)
             }
         }
     }
 
-    private fun rmDirectory(): Boolean {
-        val deleteFileList = ArrayList<FileVO>()
-        deleteFileList.add(FileVO(this.toPath(), false))
-
-        try {
-            getAllFiles(deleteFileList)
-            deleteFileList.reverse()
-
-            deleteFileList.forEach {
-                fileVO -> File(fileVO.path.pathString).delete()
-            }
-
-            return true
-        } catch (ex: IOException) {
-            return false
-        } catch (ex: SecurityException) {
-            return false
-        }
-    }
-
-    // 지정한 Path가 디렉토리일 경우, 해당 디렉토리 내부의 모든 디렉토리와 파일에 대한 Path와 파일여부 정보를 반환하는 메서드
-    @Throws(IOException::class)
-    private fun getAllFiles(files: MutableList<FileVO>) {
-        val stream = Files.newDirectoryStream(Paths.get(this.path))
-
-        stream.use {
-            stream.forEach { entry ->
-                if (Files.isDirectory(entry)) {
-                    files.add(FileVO(entry, false))
-                    getAllFiles(files)
-                } else {
-                    files.add(FileVO(entry, true))
-                }
+    @Throws(SecurityException::class)
+    private fun rmDirectory(file: File): Boolean {
+        val deleteDirectoryList = file.listFiles()
+        deleteDirectoryList?.forEach {
+            file -> if (file.isFile) {
+                file.delete()
+            } else {
+                rmDirectory(file)
             }
         }
-    }
 
-    // 경로와 해당 경로가 파일인지 여부를 담는 VO
-    private class FileVO(var path: Path, var isFile: Boolean)
+        return file.delete()
+    }
 }
