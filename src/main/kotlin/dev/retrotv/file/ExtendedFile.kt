@@ -240,22 +240,33 @@ class ExtendedFile : File {
             if (!recursive) {
                 this.delete()
             } else {
-                rmDirectory(this)
+                val results = ArrayList<Boolean>()
+                rmDirectory(this, results)
+
+                // 모든 값이 true인 경우에만 true 반환
+                results.all { it }
             }
         }
     }
 
     @Throws(SecurityException::class)
-    private fun rmDirectory(file: File): Boolean {
+    private fun rmDirectory(file: File, results: MutableList<Boolean>) {
         val deleteDirectoryList = file.listFiles()
         deleteDirectoryList?.forEach {
-            file -> if (file.isFile) {
-                file.delete()
+            file ->
+            if (file.isFile && file.delete()) {
+                results.add(true)
+            } else if (file.isFile && !file.delete()) {
+                results.add(false)
             } else {
-                rmDirectory(file)
+                rmDirectory(file, results)
             }
         }
 
-        return file.delete()
+        if (file.delete()) {
+            results.add(true)
+        } else {
+            results.add(false)
+        }
     }
 }
