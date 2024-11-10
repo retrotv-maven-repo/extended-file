@@ -54,10 +54,15 @@ class ExtendedFile : File {
 
     /**
      * 파일 확장자를 반환합니다.
+     * 해당 경로가 디렉토리인 경우, 빈 문자열을 반환합니다.
      *
      * @return 파일 확장자
      */
     fun getExtension(): String {
+        if (this.isDirectory) {
+            return ""
+        }
+
         val extension = this.name.substringAfter('.')
         if (this.name == extension) {
             return ""
@@ -67,13 +72,15 @@ class ExtendedFile : File {
     }
 
     /**
-     * 파일명을 반환합니다.
+     * 파일 및 디렉토리명을 반환합니다.
+     * isRemoveExtension 매개변수를 true로 설정하면, 확장자를 제거한 파일명을 반환합니다.
+     * 해당 경로가 디렉토리인 경우, isRemoveExtension 매개변수의 값과 관계없이 디렉토리명을 반환합니다.
      *
      * @param isRemoveExtension 확장자 제거 여부
      * @return 파일명
      */
     fun getName(isRemoveExtension: Boolean): String {
-        return if (!isRemoveExtension) {
+        return if (this.isDirectory || !isRemoveExtension) {
             this.name
         } else {
             this.name.replace(".${this.getExtension()}", "")
