@@ -275,6 +275,7 @@ class KotlinFileTest {
             Files.createDirectory(Paths.get("./src/test/resources/delete_test_directory"))
             val testDirectory = ExtendedFile("./src/test/resources/delete_test_directory")
             assertTrue(testDirectory.isDirectory)
+            assertEquals("", testDirectory.getExtension())
             assertTrue(testDirectory.exists())
 
             Files.createDirectory(Paths.get("./src/test/resources/delete_test_directory/delete_test_directory"))
