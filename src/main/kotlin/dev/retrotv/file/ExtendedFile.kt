@@ -1,5 +1,6 @@
 package dev.retrotv.file
 
+import com.sun.org.apache.xpath.internal.operations.Bool
 import dev.retrotv.crypto.enums.EHash.SHA256
 import dev.retrotv.crypto.hash.FileHash
 import dev.retrotv.crypto.hash.Hash
@@ -8,6 +9,8 @@ import java.io.File
 import java.io.IOException
 import java.net.URI
 import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
 import java.text.DecimalFormat
 import kotlin.math.pow
 
@@ -222,4 +225,52 @@ class ExtendedFile : File {
             fileSize.toString()
         }
     }
+
+    /**
+     * 파일 및 디렉토리를 삭제하고 성공 여부를 반환합니다.
+     *
+     * @param recursive 디렉토리일 경우, 재귀적으로 삭제할지에 대한 여부 (파일일 경우 무시)
+     * @return 삭제 성공 여부
+     */
+    @JvmOverloads
+    @Throws(IOException::class)
+    fun rm(recursive: Boolean = false): Boolean {
+        if (this.isFile) {
+            return this.delete()
+        }
+
+        return if (this.isDirectory && !recursive) {
+            this.delete()
+        } else if (this.isDirectory) {
+            rmDirectory()
+        } else {
+            return false
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun rmDirectory(): Boolean {
+        TODO("디렉토리 내부를 회귀적으로 삭제하는 로직을 구현")
+        return false;
+    }
+
+    // 지정한 Path가 디렉토리일 경우, 해당 디렉토리 내부의 모든 디렉토리와 파일에 대한 Path와 파일여부 정보를 반환하는 메서드
+    @Throws(IOException::class)
+    private fun getAllFiles(files: MutableList<FileVO>) {
+        val stream = Files.newDirectoryStream(Paths.get(this.path))
+
+        stream.use {
+            stream.forEach { entry ->
+                if (Files.isDirectory(entry)) {
+                    files.add(FileVO(entry, false))
+                    getAllFiles(files)
+                } else {
+                    files.add(FileVO(entry, true))
+                }
+            }
+        }
+    }
+
+    // 경로와 해당 경로가 파일인지 여부를 담는 VO
+    private class FileVO(var path: Path, var isFile: Boolean)
 }
