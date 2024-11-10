@@ -54,10 +54,15 @@ class ExtendedFile : File {
 
     /**
      * 파일 확장자를 반환합니다.
+     * 해당 경로가 디렉토리인 경우, 빈 문자열을 반환합니다.
      *
      * @return 파일 확장자
      */
     fun getExtension(): String {
+        if (this.isDirectory) {
+            return ""
+        }
+
         val extension = this.name.substringAfter('.')
         if (this.name == extension) {
             return ""
@@ -67,13 +72,15 @@ class ExtendedFile : File {
     }
 
     /**
-     * 파일명을 반환합니다.
+     * 파일 및 디렉토리명을 반환합니다.
+     * isRemoveExtension 매개변수를 true로 설정하면, 확장자를 제거한 파일명을 반환합니다.
+     * 해당 경로가 디렉토리인 경우, isRemoveExtension 매개변수의 값과 관계없이 디렉토리명을 반환합니다.
      *
      * @param isRemoveExtension 확장자 제거 여부
      * @return 파일명
      */
     fun getName(isRemoveExtension: Boolean): String {
-        return if (!isRemoveExtension) {
+        return if (this.isDirectory || !isRemoveExtension) {
             this.name
         } else {
             this.name.replace(".${this.getExtension()}", "")
@@ -213,6 +220,53 @@ class ExtendedFile : File {
             df.format(newFileSize) + " " + suffix
         } else {
             fileSize.toString()
+        }
+    }
+
+    /**
+     * 파일 및 디렉토리를 삭제하고 성공 여부를 반환합니다.
+     *
+     * @param recursive 디렉토리일 경우, 재귀적으로 삭제할지에 대한 여부 (파일일 경우 무시)
+     * @return 삭제 성공 여부
+     */
+    @JvmOverloads
+    @Throws(IOException::class, SecurityException::class)
+    fun rm(recursive: Boolean = false): Boolean {
+        return if (this.isFile) {
+            this.delete()
+
+        // isDirectory
+        } else {
+            if (!recursive) {
+                this.delete()
+            } else {
+                val results = ArrayList<Boolean>()
+                rmDirectory(this, results)
+
+                // 모든 값이 true인 경우에만 true 반환
+                results.all { it }
+            }
+        }
+    }
+
+    @Throws(SecurityException::class)
+    private fun rmDirectory(file: File, results: MutableList<Boolean>) {
+        val deleteDirectoryList = file.listFiles()
+        deleteDirectoryList?.forEach {
+            file ->
+            if (file.isFile && file.delete()) {
+                results.add(true)
+            } else if (file.isFile && !file.delete()) {
+                results.add(false)
+            } else {
+                rmDirectory(file, results)
+            }
+        }
+
+        if (file.delete()) {
+            results.add(true)
+        } else {
+            results.add(false)
         }
     }
 }

@@ -3,18 +3,14 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     java
     jacoco
-    kotlin("jvm") version "2.0.10"
     `maven-publish`
+    kotlin("jvm") version "2.0.10"
     id("org.jetbrains.dokka") version "1.9.20"
     id("org.sonarqube") version "4.0.0.2929"
 }
 
-jacoco {
-    toolVersion = "0.8.12"
-}
-
 group = "dev.retrotv"
-version = "0.5.2-alpha"
+version = "0.6.0-alpha"
 
 // Github Action 버전 출력용
 tasks.register("printVersionName") {
@@ -30,7 +26,7 @@ repositories {
 
 val cryptography = "0.42.10-alpha"
 val dataUtils = "0.16.0-alpha"
-val tika = "2.9.2"
+val tika = "2.9.2" // tika 3.0.0 부터 java 11을 요구하므로 바꾸지 말 것
 val poi = "5.2.5"
 
 dependencies {
@@ -60,7 +56,7 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             groupId = project.group.toString()
-            artifactId = "file"
+            artifactId = project.name
             version = project.version.toString()
 
             from(components["java"])

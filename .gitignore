@@ -40,3 +40,6 @@ bin/
 
 ### logs ###
 logs
+
+### kotlin ###
+.kotlin/
