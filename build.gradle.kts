@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "dev.retrotv"
-version = "0.5.2-alpha"
+version = "0.6.0-alpha"
 
 // Github Action 버전 출력용
 tasks.register("printVersionName") {
@@ -26,7 +26,7 @@ repositories {
 
 val cryptography = "0.42.10-alpha"
 val dataUtils = "0.16.0-alpha"
-val tika = "2.9.2"
+val tika = "3.0.0"
 val poi = "5.2.5"
 
 dependencies {
