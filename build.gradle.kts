@@ -26,7 +26,7 @@ repositories {
 
 val cryptography = "0.42.10-alpha"
 val dataUtils = "0.16.0-alpha"
-val tika = "3.0.0"
+val tika = "2.9.2" // tika 3.0.0 부터 java 11을 요구하므로 바꾸지 말 것
 val poi = "5.2.5"
 
 dependencies {

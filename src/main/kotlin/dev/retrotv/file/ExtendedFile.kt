@@ -1,6 +1,5 @@
 package dev.retrotv.file
 
-import com.sun.org.apache.xpath.internal.operations.Bool
 import dev.retrotv.crypto.enums.EHash.SHA256
 import dev.retrotv.crypto.hash.FileHash
 import dev.retrotv.crypto.hash.Hash
@@ -12,6 +11,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.text.DecimalFormat
+import kotlin.io.path.pathString
 import kotlin.math.pow
 
 /**
@@ -233,25 +233,39 @@ class ExtendedFile : File {
      * @return 삭제 성공 여부
      */
     @JvmOverloads
-    @Throws(IOException::class)
+    @Throws(IOException::class, SecurityException::class)
     fun rm(recursive: Boolean = false): Boolean {
-        if (this.isFile) {
-            return this.delete()
-        }
-
-        return if (this.isDirectory && !recursive) {
+        return if (this.isFile) {
             this.delete()
-        } else if (this.isDirectory) {
-            rmDirectory()
+
+        // isDirectory
         } else {
-            return false
+            if (!recursive) {
+                this.delete()
+            } else {
+                rmDirectory()
+            }
         }
     }
 
-    @Throws(IOException::class)
     private fun rmDirectory(): Boolean {
-        TODO("디렉토리 내부를 회귀적으로 삭제하는 로직을 구현")
-        return false;
+        val deleteFileList = ArrayList<FileVO>()
+
+        try {
+            getAllFiles(deleteFileList)
+
+            deleteFileList.forEach {
+                fileVO -> {
+                    File(fileVO.path.pathString).delete()
+                }
+            }
+
+            return true
+        } catch (ex: IOException) {
+            return false
+        } catch (ex: SecurityException) {
+            return false
+        }
     }
 
     // 지정한 Path가 디렉토리일 경우, 해당 디렉토리 내부의 모든 디렉토리와 파일에 대한 Path와 파일여부 정보를 반환하는 메서드
