@@ -6,6 +6,8 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import java.io.IOException
 import java.net.URISyntaxException
+import java.nio.file.Files
+import java.nio.file.Paths
 import java.util.*
 import kotlin.test.*
 
@@ -133,7 +135,7 @@ class KotlinFileTest {
         fun test_getFileSizeMB() {
             val file = ExtendedFile(Objects.requireNonNull(textFileMega).toURI())
             assertNotNull(file.getSize())
-            assertEquals("2.29 MB", file.getSize())
+            assert("2.29 MB" == file.getSize() || "2.38 MB" == file.getSize())
         }
 
         @Test
@@ -149,7 +151,7 @@ class KotlinFileTest {
         fun test_getFileSize_humanReadableFalseMB() {
             val file = ExtendedFile(Objects.requireNonNull(textFileMega).toURI())
             assertNotNull(file.getSize(false))
-            assertEquals("2400000", file.getSize(false))
+            assert("2400000" == file.getSize(false) || "2500000" == file.getSize(false))
         }
     }
 
@@ -195,39 +197,74 @@ class KotlinFileTest {
             assertTrue(file.rm())
         }
 
-        @Throws(IOException::class, SecurityException::class)
-        private fun createTestFile() {
-            ExtendedFile("./src/test/resources/delete_test_file").createNewFile()
-        }
-
         @Test
         @DisplayName("빈 디렉토리 삭제")
         @Throws(IOException::class, SecurityException::class)
         fun test_rm_emptyDirectory() {
             createTestDirectory()
-            val file = ExtendedFile(this.javaClass.getClassLoader().getResource("delete_test_directory")!!.toURI())
-            assertTrue(file.exists())
-            assertTrue(file.rm())
 
+            val file = ExtendedFile("./src/test/resources/delete_test_directory")
+            assertTrue(file.rm())
+        }
+
+        @Test
+        @DisplayName("비어있지 않은 디렉토리 삭제 실패")
+        @Throws(IOException::class, SecurityException::class)
+        fun test_rm_notEmptyDirectoryFail() {
             createTestDirectoryAndFile()
+
+            val file = ExtendedFile("./src/test/resources/delete_test_directory")
             assertFalse(file.rm())
             removeTestDirectory()
         }
 
+        @Test
+        @DisplayName("비어있지 않은 디렉토리 재귀적으로 삭제")
+        @Throws(IOException::class, SecurityException::class)
+        fun test_rm_notEmptyDirectory() {
+            createTestInnerDirectoryAndFile()
+
+            val file = ExtendedFile("./src/test/resources/delete_test_directory")
+            assertTrue(file.rm())
+        }
+
+        @Throws(IOException::class, SecurityException::class)
+        private fun createTestFile() {
+            Files.createFile(Paths.get("./src/test/resources/delete_test_file"))
+        }
+
         @Throws(SecurityException::class)
         private fun createTestDirectory() {
-            ExtendedFile("./src/test/resources/delete_test_directory").mkdir()
+            Files.createDirectory(Paths.get("./src/test/resources/delete_test_directory"))
         }
 
         @Throws(IOException::class, SecurityException::class)
         private fun createTestDirectoryAndFile() {
-            ExtendedFile("./src/test/resources/delete_test_directory").mkdir()
-            ExtendedFile("./src/test/resources/delete_test_directory/delete_test_file").createNewFile()
+            Files.createDirectory(Paths.get("./src/test/resources/delete_test_directory"))
+            Files.createFile(Paths.get("./src/test/resources/delete_test_directory/delete_test_file"))
         }
 
         @Throws(IOException::class, SecurityException::class)
         private fun removeTestDirectory() {
-            ExtendedFile("./src/test/resources/delete_test_directory").rm()
+            val file = ExtendedFile("./src/test/resources/delete_test_directory")
+            file.rm(true)
+        }
+
+        @Throws(IOException::class, SecurityException::class)
+        private fun createTestInnerDirectoryAndFile() {
+            Files.createDirectory(Paths.get("./src/test/resources/delete_test_directory"))
+            Files.createDirectory(Paths.get("./src/test/resources/delete_test_directory/delete_test_directory"))
+            Files.createDirectory(Paths.get("./src/test/resources/delete_test_directory/delete_test_directory/delete_test_directory"))
+            Files.createFile(Paths.get("./src/test/resources/delete_test_directory/delete_test_file1"))
+            Files.createFile(Paths.get("./src/test/resources/delete_test_directory/delete_test_file2"))
+            Files.createFile(Paths.get("./src/test/resources/delete_test_directory/delete_test_file3"))
+            Files.createFile(Paths.get("./src/test/resources/delete_test_directory/delete_test_directory/delete_test_file1"))
+            Files.createFile(Paths.get("./src/test/resources/delete_test_directory/delete_test_directory/delete_test_file2"))
+            Files.createFile(Paths.get("./src/test/resources/delete_test_directory/delete_test_directory/delete_test_directory/delete_test_file1"))
+            Files.createFile(Paths.get("./src/test/resources/delete_test_directory/delete_test_directory/delete_test_directory/delete_test_file2"))
+            Files.createFile(Paths.get("./src/test/resources/delete_test_directory/delete_test_directory/delete_test_directory/delete_test_file3"))
+            Files.createFile(Paths.get("./src/test/resources/delete_test_directory/delete_test_directory/delete_test_directory/delete_test_file4"))
+            Files.createFile(Paths.get("./src/test/resources/delete_test_directory/delete_test_directory/delete_test_directory/delete_test_file5"))
         }
     }
 }

@@ -250,14 +250,14 @@ class ExtendedFile : File {
 
     private fun rmDirectory(): Boolean {
         val deleteFileList = ArrayList<FileVO>()
+        deleteFileList.add(FileVO(this.toPath(), false))
 
         try {
             getAllFiles(deleteFileList)
+            deleteFileList.reverse()
 
             deleteFileList.forEach {
-                fileVO -> {
-                    File(fileVO.path.pathString).delete()
-                }
+                fileVO -> File(fileVO.path.pathString).delete()
             }
 
             return true
