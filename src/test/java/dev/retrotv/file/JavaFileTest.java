@@ -25,7 +25,7 @@ class JavaFileTest {
 
     @Test
     @DisplayName("matches() 메소드 테스트")
-    void test_matches() throws IOException, URISyntaxException {
+    void test_matches() throws URISyntaxException {
         ExtendedFile file = new ExtendedFile(Objects.requireNonNull(textFile).toURI());
         ExtendedFile file2 = new ExtendedFile(Objects.requireNonNull(textFileCopy).toURI());
         assertTrue(file.matches(file2));
