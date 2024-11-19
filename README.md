@@ -73,3 +73,5 @@ String hashCode = file.getHashCode();
 val file = ExtendedFile("file.txt")
 val hashCode = file.getHashCode()
 ```
+## TODO
+1. 더 다양한 포맷의 파일이 mimeType이 제공되는지 확인 (.hwp, .hwpx 같은 것들)
