@@ -61,7 +61,7 @@ class ExtendedFile : File {
 
     /**
      * 파일 확장자를 반환합니다.
-     * 해당 경로가 디렉터리인 경우, 빈 문자열을 반환합니다.
+     * 확장자가 없거나 해당 경로가 디렉터리인 경우, 빈 문자열을 반환합니다.
      *
      * @author yjj8353
      * @since 1.0.0
@@ -82,15 +82,17 @@ class ExtendedFile : File {
 
     /**
      * 파일 및 디렉터리명을 반환합니다.
-     * isRemoveExtension 매개변수를 true로 설정하면, 확장자를 제거한 파일명을 반환합니다.
+     * isRemoveExtension 매개변수를 true로 설정하면, 확장자를 제거한 파일명을 반환합니다. (기본 값: false)
      * 해당 경로가 디렉터리인 경우, isRemoveExtension 매개변수의 값과 관계없이 디렉터리명을 반환합니다.
      *
      * @author yjj8353
      * @since 1.0.0
      * @param isRemoveExtension 확장자 제거 여부
      * @return 파일명
+     * @throws SecurityException 파일 및 디렉터리 접근 권한이 없으면 던져짐
      */
-    fun getName(isRemoveExtension: Boolean): String {
+    @JvmOverloads
+    fun getName(isRemoveExtension: Boolean = false): String {
         return if (this.isDirectory || !isRemoveExtension) {
             this.name
         } else {
@@ -305,8 +307,7 @@ class ExtendedFile : File {
         
         // 해당 디렉터리의 모든 파일 및 디렉터리 정보를 가져옴
         val deleteDirectoryList = file.listFiles()
-        deleteDirectoryList?.forEach {
-            file ->
+        deleteDirectoryList?.forEach { file ->
             if (file.isFile && rmFile(file)) {
                 results.add(true)
             } else if (file.isFile && !rmFile(file)) {
