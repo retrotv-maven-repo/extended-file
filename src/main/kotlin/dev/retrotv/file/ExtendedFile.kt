@@ -87,13 +87,12 @@ class ExtendedFile : File {
      *
      * @author yjj8353
      * @since 1.0.0
-     * @param isRemoveExtension 확장자 제거 여부
+     * @param removeExtension 확장자 제거 여부
      * @return 파일명
      * @throws SecurityException 파일 및 디렉터리 접근 권한이 없으면 던져짐
      */
-    @JvmOverloads
-    fun getName(isRemoveExtension: Boolean = false): String {
-        return if (this.isDirectory || !isRemoveExtension) {
+    fun getName(removeExtension: Boolean = false): String {
+        return if (this.isDirectory || !removeExtension) {
             this.name
         } else {
             this.name.replace(".${this.getExtension()}", "")
