@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.net.URI
 
 plugins {
     java
@@ -24,8 +25,8 @@ repositories {
     maven { setUrl("https://jitpack.io") }
 }
 
-val cryptography = "0.42.10-alpha"
-val dataUtils = "0.21.0-alpha"
+val cryptography = "1.0.0"
+val dataUtils = "0.21.6-alpha"
 val tika = "2.9.2" // tika 3.0.0 부터 java 11을 요구하므로 바꾸지 말 것
 val poi = "5.3.0"
 
@@ -52,12 +53,22 @@ tasks {
 }
 
 publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = URI("https://maven.pkg.github.com/retrotv-maven-repo/extended-file")
+            credentials {
+                username = System.getenv("USERNAME")
+                password = System.getenv("PASSWORD")
+            }
+        }
+    }
+
     publications {
         create<MavenPublication>("maven") {
             groupId = project.group.toString()
             artifactId = project.name
             version = project.version.toString()
-
             from(components["java"])
         }
     }
