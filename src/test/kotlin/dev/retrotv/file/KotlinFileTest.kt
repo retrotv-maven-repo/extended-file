@@ -202,7 +202,7 @@ class KotlinFileTest {
 
         @Test
         @Order(2)
-        @DisplayName("빈 디렉토리 삭제")
+        @DisplayName("빈 디렉터리 삭제")
         @Throws(IOException::class, SecurityException::class)
         fun test_rm_emptyDirectory() {
             createTestDirectory()
@@ -213,7 +213,7 @@ class KotlinFileTest {
 
         @Test
         @Order(3)
-        @DisplayName("비어있지 않은 디렉토리 삭제 실패")
+        @DisplayName("비어있지 않은 디렉터리 삭제 실패")
         @Throws(IOException::class, SecurityException::class)
         fun test_rm_notEmptyDirectoryFail() {
             createTestDirectoryAndFile()
@@ -225,7 +225,7 @@ class KotlinFileTest {
 
         @Test
         @Order(4)
-        @DisplayName("비어있지 않은 디렉토리 재귀적으로 삭제")
+        @DisplayName("비어있지 않은 디렉터리 재귀적으로 삭제")
         @Throws(IOException::class, SecurityException::class)
         fun test_rm_notEmptyDirectory() {
             createTestInnerDirectoryAndFile()
