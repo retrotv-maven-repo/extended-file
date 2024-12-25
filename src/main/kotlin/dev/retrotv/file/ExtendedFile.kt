@@ -1,8 +1,10 @@
 package dev.retrotv.file
 
 import dev.retrotv.crypto.enums.EHash.SHA256
-import dev.retrotv.crypto.hash.FileHash
+import dev.retrotv.crypto.hash.BinaryHash
 import dev.retrotv.crypto.hash.Hash
+import dev.retrotv.crypto.util.CodecUtils
+import org.apache.commons.compress.harmony.pack200.Codec
 import org.apache.tika.Tika
 import org.apache.tika.metadata.Metadata
 import java.io.File
@@ -180,12 +182,13 @@ class ExtendedFile : File {
      * @author yjj8353
      * @since 1.0.0
      * @param file 비교할 [File] 객체
-     * @param fileHash 파일 해시 알고리즘
+     * @param hash 파일 해시 알고리즘
      * @return 동일한 파일인지 여부
      */
     @JvmOverloads
-    fun matches(file: File, fileHash: FileHash = Hash.getInstance(SHA256)): Boolean
-        = fileHash.matches(this, fileHash.hash(file))
+    fun matches(file: File, hash: BinaryHash = Hash.getInstance(SHA256)): Boolean {
+        return hash.matches(this.readBytes(), CodecUtils.encode(hash.hash(file.readBytes())))
+    }
 
     /**
      * 파일을 처음부터 끝까지 읽어서, 동일한 파일인지 여부를 반환합니다.
@@ -219,13 +222,13 @@ class ExtendedFile : File {
      *
      * @author yjj8353
      * @since 1.0.0
-     * @param fileHash 파일 해시 알고리즘
+     * @param hash 파일 해시 알고리즘
      * @return 파일의 해시 코드
      * @throws IOException 파일을 읽어들이는 과정에서 오류가 발생하면 던져짐
      */
     @JvmOverloads
     @Throws(IOException::class)
-    fun getHash(fileHash: FileHash = Hash.getInstance(SHA256)): String = fileHash.hash(this)
+    fun getHash(hash: BinaryHash = Hash.getInstance(SHA256)): String = CodecUtils.encode(hash.hash(this.readBytes()))
 
     /**
      * 파일의 크기를 반환합니다.

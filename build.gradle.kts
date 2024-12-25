@@ -5,13 +5,13 @@ plugins {
     java
     jacoco
     `maven-publish`
-    kotlin("jvm") version "2.0.10"
+    kotlin("jvm") version "2.0.21"
     id("org.jetbrains.dokka") version "1.9.20"
     id("org.sonarqube") version "4.0.0.2929"
 }
 
 group = "dev.retrotv"
-version = "1.0.0"
+version = "1.1.0"
 
 // Github Action 버전 출력용
 tasks.register("printVersionName") {
@@ -25,7 +25,7 @@ repositories {
     maven { setUrl("https://jitpack.io") }
 }
 
-val cryptography = "0.43.1-alpha"
+val cryptography = "0.44.0-alpha"
 val dataUtils = "0.21.6-alpha"
 val tika = "2.9.2" // tika 3.0.0 부터 java 11을 요구하므로 바꾸지 말 것
 val poi = "5.3.0"
