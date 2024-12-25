@@ -61,10 +61,6 @@ publishing {
         maven {
             name = "MavenCentral"
             url = URI("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
-            credentials {
-                username = System.getenv("SONATYPE_USERNAME")
-                password = System.getenv("SONATYPE_PASSWORD")
-            }
         }
 
         // Github Packages에 배포하기 위한 설정
