@@ -1,20 +1,17 @@
-// import com.vanniktech.maven.publish.SonatypeHost
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.net.URI
 
 plugins {
     java
     jacoco
-    // signing
     `maven-publish`
     kotlin("jvm") version "2.0.21"
-    // id("com.vanniktech.maven.publish") version "0.30.0"
     id("org.jetbrains.dokka") version "1.9.20"
     id("org.sonarqube") version "4.0.0.2929"
 }
 
 group = "dev.retrotv"
-version = "1.1.1"
+version = "1.1.2"
 
 // Github Action 버전 출력용
 tasks.register("printVersionName") {
@@ -59,8 +56,12 @@ publishing {
     repositories {
 
         maven {
-            name = "MavenCentral"
+            name = "OSSRH"
             url = URI("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+            credentials {
+                username = System.getenv("MAVEN_USERNAME")
+                password = System.getenv("MAVEN_PASSWORD")
+            }
         }
 
         // Github Packages에 배포하기 위한 설정
