@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "dev.retrotv"
-version = "1.1.2"
+version = "1.1.3"
 
 // Github Action 버전 출력용
 tasks.register("printVersionName") {
@@ -55,15 +55,6 @@ tasks {
 publishing {
     repositories {
 
-        maven {
-            name = "OSSRH"
-            url = URI("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
-            credentials {
-                username = System.getenv("MAVEN_USERNAME")
-                password = System.getenv("MAVEN_PASSWORD")
-            }
-        }
-
         // Github Packages에 배포하기 위한 설정
         maven {
             name = "GitHubPackages"
@@ -84,41 +75,6 @@ publishing {
         }
     }
 }
-
-/*mavenPublishing {
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
-    signAllPublications()
-    coordinates("dev.retrotv", "extended-file", project.version.toString())
-
-    pom {
-        name.set("Extended File")
-        description.set("File 클래스의 기능을 확장한 클래스입니다.")
-        url.set("https://github.com/retrotv-maven-repo/extended-file")
-        licenses {
-            license {
-                name.set("Apache License 2.0")
-                url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-            }
-        }
-        developers {
-            developer {
-                id.set("yjj8353")
-                name.set("yjj8353")
-                email.set("yjj8353@gmail.com")
-                url.set("https://blog.retrotv.dev")
-            }
-        }
-        scm {
-            connection.set("scm:git:github.com/retrotv-maven-repo/extended-file.git")
-            developerConnection.set("scm:git:ssh://github.com/retrotv-maven-repo/extended-file.git")
-            url.set("https://github.com/retrotv-maven-repo/extended-file/tree/deploy")
-        }
-    }
-}
-
-signing {
-    sign(publishing.publications)
-}*/
 
 tasks.test {
     useJUnitPlatform()
