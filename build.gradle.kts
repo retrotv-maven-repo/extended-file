@@ -6,7 +6,7 @@ plugins {
     jacoco
     `maven-publish`
     kotlin("jvm") version "2.0.21"
-    id("org.jetbrains.dokka") version "1.9.20"
+    id("org.jetbrains.dokka") version "2.0.0"
     id("org.sonarqube") version "4.0.0.2929"
 }
 
