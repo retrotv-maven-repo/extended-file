@@ -4,7 +4,6 @@ import dev.retrotv.crypto.enums.EHash.SHA256
 import dev.retrotv.crypto.hash.BinaryHash
 import dev.retrotv.crypto.hash.Hash
 import dev.retrotv.crypto.util.CodecUtils
-import org.apache.commons.compress.harmony.pack200.Codec
 import org.apache.tika.Tika
 import org.apache.tika.metadata.Metadata
 import java.io.File

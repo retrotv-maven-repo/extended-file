@@ -1,0 +1,77 @@
+subprojects {
+    apply plugin: "jacoco"
+
+    jacoco {
+        toolVersion = "0.8.12"
+    }
+
+    test {
+
+        // JaCoCo 리포트 생성
+        finalizedBy "jacocoTestReport"
+    }
+
+    jacocoTestReport {
+        dependsOn test
+
+        reports {
+            html.required = true
+            xml.required = true
+            csv.required = false
+        }
+
+        afterEvaluate {
+            classDirectories.setFrom(
+                files(
+                    classDirectories.files.collect {
+
+                        // 검사 제외
+                        fileTree(
+                            dir: it,
+                            excludes: [
+                                  "**/config/*"
+                                , "**/util/*"
+                                , "**/exception/**"
+                                , "**/enums/**"
+                            ]
+                        )
+                    }
+                )
+            )
+        }
+
+        // 테스트 후에 jacocoTestCoverageVerification 실행
+        finalizedBy "jacocoTestCoverageVerification"
+    }
+
+    // 전체 코드의 80% 이상 커버리지를 가지고 있어야 함
+    jacocoTestCoverageVerification {
+        violationRules {
+            rule {
+                enabled = false
+                element = "CLASS"
+                limit {
+                    counter = "LINE"
+                    value = "COVEREDRATIO"
+                    minimum = 0.8
+                }
+                excludes = [
+                      "**/config/**"
+                    , "**/util/**"
+                    , "**/exception/**"
+                    , "**/enums/**"
+                ]
+            }
+        }
+
+        finalizedBy "copyJacocoReport"
+    }
+
+    // Coverage Gutters 플러그인을 위한 jacoco.xml 파일 복사
+    tasks.register("copyJacocoReport", Copy) {
+        dependsOn jacocoTestCoverageVerification
+        from layout.buildDirectory.dir("reports/jacoco/test/jacocoTestReport.xml").get().asFile
+        into layout.buildDirectory.dir("jacoco")
+        rename { String fileName -> fileName.replace("jacocoTestReport.xml", "jacoco.xml") }
+    }
+}
