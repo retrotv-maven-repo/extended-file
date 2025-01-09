@@ -29,6 +29,7 @@ val cryptography = "0.47.0-alpha"
 val dataUtils = "0.21.6-alpha"
 val tika = "2.9.2" // tika 3.0.0 부터 java 11을 요구하므로 바꾸지 말 것
 val poi = "5.3.0"
+val junit = "5.11.4"
 
 dependencies {
     implementation("com.github.retrotv-maven-repo:cryptography:${cryptography}")
@@ -41,6 +42,10 @@ dependencies {
     implementation("org.apache.poi:poi:${poi}")
 
     testImplementation(kotlin("test"))
+    testImplementation("org.junit.jupiter:junit-jupiter:${junit}")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${junit}")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:${junit}")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:${junit}")
 }
 
 tasks {
