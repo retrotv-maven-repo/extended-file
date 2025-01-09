@@ -4,7 +4,6 @@ import dev.retrotv.crypto.enums.EHash.SHA256
 import dev.retrotv.crypto.hash.BinaryHash
 import dev.retrotv.crypto.hash.Hash
 import dev.retrotv.crypto.util.CodecUtils
-import org.apache.commons.compress.harmony.pack200.Codec
 import org.apache.tika.Tika
 import org.apache.tika.metadata.Metadata
 import java.io.File
@@ -187,7 +186,7 @@ class ExtendedFile : File {
      */
     @JvmOverloads
     fun matches(file: File, hash: BinaryHash = Hash.getInstance(SHA256)): Boolean {
-        return hash.matches(this.readBytes(), CodecUtils.encode(hash.hash(file.readBytes())))
+        return hash.matches(this.readBytes(), CodecUtils.encode(hash.hashing(file.readBytes())))
     }
 
     /**
@@ -228,7 +227,7 @@ class ExtendedFile : File {
      */
     @JvmOverloads
     @Throws(IOException::class)
-    fun getHash(hash: BinaryHash = Hash.getInstance(SHA256)): String = CodecUtils.encode(hash.hash(this.readBytes()))
+    fun getHash(hash: BinaryHash = Hash.getInstance(SHA256)): String = CodecUtils.encode(hash.hashing(this.readBytes()))
 
     /**
      * 파일의 크기를 반환합니다.
