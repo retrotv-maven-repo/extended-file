@@ -25,7 +25,7 @@ repositories {
     maven { setUrl("https://jitpack.io") }
 }
 
-val cryptography = "0.47.0-alpha"
+val cryptography = "0.47.2-alpha"
 val dataUtils = "0.21.6-alpha"
 val tika = "2.9.2" // tika 3.0.0 부터 java 11을 요구하므로 바꾸지 말 것
 val poi = "5.3.0"
