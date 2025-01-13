@@ -1,6 +1,7 @@
 package dev.retrotv.file
 
-import dev.retrotv.crypto.enums.EHash.SHA256
+import dev.retrotv.crypto.enums.EHash
+import dev.retrotv.crypto.enums.EHash.*
 import dev.retrotv.crypto.hash.BinaryHash
 import dev.retrotv.crypto.hash.Hash
 import dev.retrotv.crypto.util.CodecUtils
@@ -190,6 +191,16 @@ class ExtendedFile : File {
     }
 
     /**
+     * 파일의 해시 코드를 생성해서, 동일한 파일인지 여부를 반환합니다.
+     * 파일 해시 알고리즘을 별도로 지정하지 않는 경우, SHA-256 알고리즘을 사용합니다.
+     *
+     * @param file 비교할 [File] 객체
+     * @param hash 파일 해시 알고리즘 (문자열)
+     * @return 동일한 파일인지 여부
+     */
+    fun matches(file: File, hash: String): Boolean = matches(file, Hash.getInstance(selectHashAlgorithm(hash)))
+
+    /**
      * 파일을 처음부터 끝까지 읽어서, 동일한 파일인지 여부를 반환합니다.
      * 해시 코드를 이용한 비교보다 정확하지만 파일의 크기에 따라 성능에 영향을 미칠 수 있습니다.
      *
@@ -228,6 +239,19 @@ class ExtendedFile : File {
     @JvmOverloads
     @Throws(IOException::class)
     fun getHash(hash: BinaryHash = Hash.getInstance(SHA256)): String = CodecUtils.encode(hash.hashing(this.readBytes()))
+
+    /**
+     * 파일의 해시 코드를 생성해서 반환합니다.
+     * 파일 해시 알고리즘을 별도로 지정하지 않는 경우, SHA-256 알고리즘을 사용합니다.
+     *
+     * @author yjj8353
+     * @since 1.0.0
+     * @param hash 파일 해시 알고리즘 (문자열)
+     * @return 파일의 해시 코드
+     * @throws IOException 파일을 읽어들이는 과정에서 오류가 발생하면 던져짐
+     */
+    @Throws(IOException::class)
+    fun getHash(hash: String): String = getHash(Hash.getInstance(selectHashAlgorithm(hash)))
 
     /**
      * 파일의 크기를 반환합니다.
@@ -323,6 +347,22 @@ class ExtendedFile : File {
             results.add(true)
         } else {
             results.add(false)
+        }
+    }
+
+    private fun selectHashAlgorithm(hash: String): EHash {
+        return when (hash) {
+            "MD5", "md5" -> MD5
+            "SHA-1", "sha-1", "SHA1", "sha1" -> SHA1
+            "SHA-224", "sha-224", "SHA224", "sha224" -> SHA224
+            "SHA-256", "sha-256", "SHA256","sha256" -> SHA256
+            "SHA-384", "sha-384", "SHA384", "sha384" -> SHA384
+            "SHA-512", "sha-512", "SHA512", "sha512" -> SHA512
+            "SHA3-224", "sha3-224", "SHA3224", "sha3224" -> SHA3224
+            "SHA3-256", "sha3-256", "SHA3256", "sha3256" -> SHA3256
+            "SHA3-384", "sha3-384", "SHA3384", "sha3384" -> SHA3384
+            "SHA3-512", "sha3-512", "SHA3512", "sha3512" -> SHA3512
+            else -> throw IllegalArgumentException("지원하지 않는 해시 알고리즘입니다.")
         }
     }
 }

@@ -1,6 +1,7 @@
 package dev.retrotv.file
 
 import dev.retrotv.crypto.enums.EHash
+import dev.retrotv.crypto.enums.EHash.SHA256
 import dev.retrotv.crypto.hash.Hash
 import org.junit.experimental.runners.Enclosed
 import org.junit.jupiter.api.Test
@@ -80,6 +81,7 @@ class KotlinFileTest {
     fun test_getHashCode_sha512() {
         val file = ExtendedFile(Objects.requireNonNull(textFile).toURI())
         assertNotNull(file.getHash(Hash.getInstance(EHash.SHA512)))
+        assertNotNull(file.getHash("SHA-512"))
     }
 
     @Nested
@@ -92,6 +94,8 @@ class KotlinFileTest {
             val file = ExtendedFile(Objects.requireNonNull(textFile).toURI())
             val file2 = ExtendedFile(Objects.requireNonNull(textFileCopy).toURI())
             assertTrue(file.matches(file2))
+            assertTrue(file.matches(file2, Hash.getInstance(SHA256)))
+            assertTrue(file.matches(file2, "SHA-256"))
         }
 
         @Test
@@ -100,6 +104,8 @@ class KotlinFileTest {
             val file = ExtendedFile(Objects.requireNonNull(textFile).toURI())
             val file2 = ExtendedFile(Objects.requireNonNull(textFileDifferent).toURI())
             assertFalse(file.matches(file2))
+            assertFalse(file.matches(file2, Hash.getInstance(SHA256)))
+            assertFalse(file.matches(file2, "SHA-256"))
         }
     }
 
