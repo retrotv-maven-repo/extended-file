@@ -85,5 +85,23 @@ kotlin {
     jvmToolchain(8)
 }
 
-apply(from = "${rootDir}/gradle/sonarcloud.gradle")
-apply(from = "${rootDir}/gradle/jacoco.gradle")
+tasks.jacocoTestReport {
+    reports {
+        // HTML 파일을 생성하도록 설정
+        html.required = true
+        // SonarQube에서 Jacoco XML 파일을 읽을 수 있도록 설정
+        xml.required = true
+        csv.required = false
+    }
+}
+
+sonar {
+    properties {
+        property("sonar.projectKey", "retrotv-maven-repo_extended-file")
+        property("sonar.organization", "retrotv-maven-repo")
+        property("sonar.host.url", "https://sonarcloud.io")
+    }
+}
+
+//apply(from = "${rootDir}/gradle/sonarcloud.gradle")
+//apply(from = "${rootDir}/gradle/jacoco.gradle")
