@@ -25,11 +25,13 @@ repositories {
     maven { setUrl("https://jitpack.io") }
 }
 
-val cryptography = "0.47.2-alpha"
+val cryptography = "0.47.0-alpha"
 val dataUtils = "0.21.6-alpha"
 val tika = "2.9.2" // tika 3.0.0 부터 java 11을 요구하므로 바꾸지 말 것
 val poi = "5.3.0"
 val junit = "5.11.4"
+val slf4j = "2.0.16"
+val log4j = "2.24.3"
 
 dependencies {
     implementation("com.github.retrotv-maven-repo:cryptography:${cryptography}")
@@ -40,6 +42,11 @@ dependencies {
 
     implementation("org.apache.poi:poi-ooxml:${poi}")
     implementation("org.apache.poi:poi:${poi}")
+
+    // Logger
+    implementation("org.slf4j:slf4j-api:${slf4j}")
+    implementation("org.apache.logging.log4j:log4j-core:${log4j}")
+    implementation("org.apache.logging.log4j:log4j-api:${log4j}")
 
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter:${junit}")
@@ -81,14 +88,21 @@ publishing {
     }
 }
 
+tasks.test {
+    useJUnitPlatform()
+    finalizedBy("jacocoTestReport")
+}
+
 kotlin {
     jvmToolchain(8)
 }
 
 tasks.jacocoTestReport {
     reports {
+
         // HTML 파일을 생성하도록 설정
         html.required = true
+
         // SonarQube에서 Jacoco XML 파일을 읽을 수 있도록 설정
         xml.required = true
         csv.required = false

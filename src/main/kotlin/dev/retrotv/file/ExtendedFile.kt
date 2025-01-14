@@ -2,7 +2,6 @@ package dev.retrotv.file
 
 import dev.retrotv.crypto.enums.EHash
 import dev.retrotv.crypto.enums.EHash.*
-import dev.retrotv.crypto.hash.BinaryHash
 import dev.retrotv.crypto.hash.Hash
 import dev.retrotv.crypto.util.CodecUtils
 import org.apache.tika.Tika
@@ -186,7 +185,8 @@ class ExtendedFile : File {
      * @return 동일한 파일인지 여부
      */
     @JvmOverloads
-    fun matches(file: File, hash: BinaryHash = Hash.getInstance(SHA256)): Boolean {
+    fun matches(file: File, hash: EHash = SHA256): Boolean {
+        val hash = Hash.getInstance(hash)
         return hash.matches(this.readBytes(), CodecUtils.encode(hash.hashing(file.readBytes())))
     }
 
@@ -198,7 +198,7 @@ class ExtendedFile : File {
      * @param hash 파일 해시 알고리즘 (문자열)
      * @return 동일한 파일인지 여부
      */
-    fun matches(file: File, hash: String): Boolean = matches(file, Hash.getInstance(selectHashAlgorithm(hash)))
+    fun matches(file: File, hash: String): Boolean = matches(file, selectHashAlgorithm(hash))
 
     /**
      * 파일을 처음부터 끝까지 읽어서, 동일한 파일인지 여부를 반환합니다.
@@ -238,7 +238,10 @@ class ExtendedFile : File {
      */
     @JvmOverloads
     @Throws(IOException::class)
-    fun getHash(hash: BinaryHash = Hash.getInstance(SHA256)): String = CodecUtils.encode(hash.hashing(this.readBytes()))
+    fun getHash(hash: EHash = SHA256): String {
+        val hash = Hash.getInstance(hash)
+        return CodecUtils.encode(hash.hashing(this.readBytes()))
+    }
 
     /**
      * 파일의 해시 코드를 생성해서 반환합니다.
@@ -251,7 +254,7 @@ class ExtendedFile : File {
      * @throws IOException 파일을 읽어들이는 과정에서 오류가 발생하면 던져짐
      */
     @Throws(IOException::class)
-    fun getHash(hash: String): String = getHash(Hash.getInstance(selectHashAlgorithm(hash)))
+    fun getHash(hash: String): String = getHash(selectHashAlgorithm(hash))
 
     /**
      * 파일의 크기를 반환합니다.

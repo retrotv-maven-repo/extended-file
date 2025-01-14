@@ -2,13 +2,10 @@ package dev.retrotv.file
 
 import dev.retrotv.crypto.enums.EHash
 import dev.retrotv.crypto.enums.EHash.SHA256
-import dev.retrotv.crypto.hash.Hash
-import org.junit.experimental.runners.Enclosed
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Order
-import org.junit.runner.RunWith
 import java.io.IOException
 import java.net.URISyntaxException
 import java.nio.file.Files
@@ -17,7 +14,6 @@ import java.util.*
 
 import org.junit.jupiter.api.Assertions.*
 
-@RunWith(Enclosed::class)
 class KotlinFileTest {
     private val textFile = this.javaClass.getClassLoader().getResource("text_file")
     private val textFileCopy = this.javaClass.getClassLoader().getResource("text_file_copy")
@@ -80,7 +76,7 @@ class KotlinFileTest {
     @DisplayName("getHashCode(SHA512()) 메서드 테스트")
     fun test_getHashCode_sha512() {
         val file = ExtendedFile(Objects.requireNonNull(textFile).toURI())
-        assertNotNull(file.getHash(Hash.getInstance(EHash.SHA512)))
+        assertNotNull(file.getHash(EHash.SHA512))
         assertNotNull(file.getHash("SHA-512"))
     }
 
@@ -94,7 +90,7 @@ class KotlinFileTest {
             val file = ExtendedFile(Objects.requireNonNull(textFile).toURI())
             val file2 = ExtendedFile(Objects.requireNonNull(textFileCopy).toURI())
             assertTrue(file.matches(file2))
-            assertTrue(file.matches(file2, Hash.getInstance(SHA256)))
+            assertTrue(file.matches(file2, SHA256))
             assertTrue(file.matches(file2, "SHA-256"))
         }
 
@@ -104,7 +100,7 @@ class KotlinFileTest {
             val file = ExtendedFile(Objects.requireNonNull(textFile).toURI())
             val file2 = ExtendedFile(Objects.requireNonNull(textFileDifferent).toURI())
             assertFalse(file.matches(file2))
-            assertFalse(file.matches(file2, Hash.getInstance(SHA256)))
+            assertFalse(file.matches(file2, SHA256))
             assertFalse(file.matches(file2, "SHA-256"))
         }
     }
