@@ -109,13 +109,5 @@ tasks.jacocoTestReport {
     }
 }
 
-sonar {
-    properties {
-        property("sonar.projectKey", "retrotv-maven-repo_extended-file")
-        property("sonar.organization", "retrotv-maven-repo")
-        property("sonar.host.url", "https://sonarcloud.io")
-    }
-}
-
-//apply(from = "${rootDir}/gradle/sonarcloud.gradle")
+apply(from = "${rootDir}/gradle/sonarcloud.gradle")
 //apply(from = "${rootDir}/gradle/jacoco.gradle")

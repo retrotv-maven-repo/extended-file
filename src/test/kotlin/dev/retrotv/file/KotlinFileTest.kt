@@ -91,7 +91,16 @@ class KotlinFileTest {
             val file2 = ExtendedFile(Objects.requireNonNull(textFileCopy).toURI())
             assertTrue(file.matches(file2))
             assertTrue(file.matches(file2, SHA256))
+            assertTrue(file.matches(file2, "MD5"))
+            assertTrue(file.matches(file2, "SHA-1"))
+            assertTrue(file.matches(file2, "SHA-224"))
             assertTrue(file.matches(file2, "SHA-256"))
+            assertTrue(file.matches(file2, "SHA-384"))
+            assertTrue(file.matches(file2, "SHA-512"))
+            assertTrue(file.matches(file2, "SHA3-224"))
+            assertTrue(file.matches(file2, "SHA3-256"))
+            assertTrue(file.matches(file2, "SHA3-384"))
+            assertTrue(file.matches(file2, "SHA3-512"))
         }
 
         @Test
