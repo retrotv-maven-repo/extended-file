@@ -88,26 +88,9 @@ publishing {
     }
 }
 
-tasks.test {
-    useJUnitPlatform()
-    finalizedBy("jacocoTestReport")
-}
-
 kotlin {
     jvmToolchain(8)
 }
 
-tasks.jacocoTestReport {
-    reports {
-
-        // HTML 파일을 생성하도록 설정
-        html.required = true
-
-        // SonarQube에서 Jacoco XML 파일을 읽을 수 있도록 설정
-        xml.required = true
-        csv.required = false
-    }
-}
-
 apply(from = "${rootDir}/gradle/sonarcloud.gradle")
-//apply(from = "${rootDir}/gradle/jacoco.gradle")
+apply(from = "${rootDir}/gradle/jacoco.gradle")
