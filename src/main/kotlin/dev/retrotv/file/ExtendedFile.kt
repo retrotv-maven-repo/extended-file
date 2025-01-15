@@ -1,7 +1,6 @@
 package dev.retrotv.file
 
-import dev.retrotv.crypto.enums.EHash.SHA256
-import dev.retrotv.crypto.hash.BinaryHash
+import dev.retrotv.crypto.enums.EHash.*
 import dev.retrotv.crypto.hash.Hash
 import dev.retrotv.crypto.util.CodecUtils
 import org.apache.tika.Tika
@@ -20,6 +19,18 @@ import kotlin.math.pow
  * @since 1.0.0
  */
 class ExtendedFile : File {
+    enum class EHash {
+          MD5
+        , SHA1
+        , SHA224
+        , SHA256
+        , SHA384
+        , SHA512
+        , SHA3224
+        , SHA3256
+        , SHA3384
+        , SHA3512
+    }
 
     /**
      * 입력받은 filepath를 기반으로 [File] 객체를 생성합니다.
@@ -185,9 +196,20 @@ class ExtendedFile : File {
      * @return 동일한 파일인지 여부
      */
     @JvmOverloads
-    fun matches(file: File, hash: BinaryHash = Hash.getInstance(SHA256)): Boolean {
+    fun matches(file: File, hash: EHash = ExtendedFile.EHash.SHA256): Boolean {
+        val hash = Hash.getInstance(selectHashAlgorithm(hash))
         return hash.matches(this.readBytes(), CodecUtils.encode(hash.hashing(file.readBytes())))
     }
+
+    /**
+     * 파일의 해시 코드를 생성해서, 동일한 파일인지 여부를 반환합니다.
+     * 파일 해시 알고리즘을 별도로 지정하지 않는 경우, SHA-256 알고리즘을 사용합니다.
+     *
+     * @param file 비교할 [File] 객체
+     * @param hash 파일 해시 알고리즘 (문자열)
+     * @return 동일한 파일인지 여부
+     */
+    fun matches(file: File, hash: String): Boolean = matches(file, selectHashAlgorithm(hash))
 
     /**
      * 파일을 처음부터 끝까지 읽어서, 동일한 파일인지 여부를 반환합니다.
@@ -227,7 +249,23 @@ class ExtendedFile : File {
      */
     @JvmOverloads
     @Throws(IOException::class)
-    fun getHash(hash: BinaryHash = Hash.getInstance(SHA256)): String = CodecUtils.encode(hash.hashing(this.readBytes()))
+    fun getHash(hash: EHash = ExtendedFile.EHash.SHA256): String {
+        val hash = Hash.getInstance(selectHashAlgorithm(hash))
+        return CodecUtils.encode(hash.hashing(this.readBytes()))
+    }
+
+    /**
+     * 파일의 해시 코드를 생성해서 반환합니다.
+     * 파일 해시 알고리즘을 별도로 지정하지 않는 경우, SHA-256 알고리즘을 사용합니다.
+     *
+     * @author yjj8353
+     * @since 1.0.0
+     * @param hash 파일 해시 알고리즘 (문자열)
+     * @return 파일의 해시 코드
+     * @throws IOException 파일을 읽어들이는 과정에서 오류가 발생하면 던져짐
+     */
+    @Throws(IOException::class)
+    fun getHash(hash: String): String = getHash(selectHashAlgorithm(hash))
 
     /**
      * 파일의 크기를 반환합니다.
@@ -323,6 +361,37 @@ class ExtendedFile : File {
             results.add(true)
         } else {
             results.add(false)
+        }
+    }
+
+    private fun selectHashAlgorithm(hash: String): ExtendedFile.EHash {
+        return when (hash) {
+            "MD5", "md5" -> ExtendedFile.EHash.MD5
+            "SHA-1", "sha-1", "SHA1", "sha1" -> ExtendedFile.EHash.SHA1
+            "SHA-224", "sha-224", "SHA224", "sha224" -> ExtendedFile.EHash.SHA224
+            "SHA-256", "sha-256", "SHA256","sha256" -> ExtendedFile.EHash.SHA256
+            "SHA-384", "sha-384", "SHA384", "sha384" -> ExtendedFile.EHash.SHA384
+            "SHA-512", "sha-512", "SHA512", "sha512" -> ExtendedFile.EHash.SHA512
+            "SHA3-224", "sha3-224", "SHA3224", "sha3224" -> ExtendedFile.EHash.SHA3224
+            "SHA3-256", "sha3-256", "SHA3256", "sha3256" -> ExtendedFile.EHash.SHA3256
+            "SHA3-384", "sha3-384", "SHA3384", "sha3384" -> ExtendedFile.EHash.SHA3384
+            "SHA3-512", "sha3-512", "SHA3512", "sha3512" -> ExtendedFile.EHash.SHA3512
+            else -> throw IllegalArgumentException("지원하지 않는 해시 알고리즘입니다.")
+        }
+    }
+
+    private fun selectHashAlgorithm(hash: ExtendedFile.EHash): dev.retrotv.crypto.enums.EHash {
+        return when (hash) {
+            ExtendedFile.EHash.MD5 -> MD5
+            ExtendedFile.EHash.SHA1 -> SHA1
+            ExtendedFile.EHash.SHA224 -> SHA224
+            ExtendedFile.EHash.SHA256 -> SHA256
+            ExtendedFile.EHash.SHA384 -> SHA384
+            ExtendedFile.EHash.SHA512 -> SHA512
+            ExtendedFile.EHash.SHA3224 -> SHA3224
+            ExtendedFile.EHash.SHA3256 -> SHA3256
+            ExtendedFile.EHash.SHA3384 -> SHA3384
+            ExtendedFile.EHash.SHA3512 -> SHA3512
         }
     }
 }
