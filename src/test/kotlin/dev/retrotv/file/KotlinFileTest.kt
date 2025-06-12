@@ -95,6 +95,8 @@ class KotlinFileTest {
             assertTrue(file.matches(file2, "SHA-256"))
             assertTrue(file.matches(file2, "SHA-384"))
             assertTrue(file.matches(file2, "SHA-512"))
+            assertTrue(file.matches(file2, "SHA-512/224"))
+            assertTrue(file.matches(file2, "SHA-512/256"))
             assertTrue(file.matches(file2, "SHA3-224"))
             assertTrue(file.matches(file2, "SHA3-256"))
             assertTrue(file.matches(file2, "SHA3-384"))

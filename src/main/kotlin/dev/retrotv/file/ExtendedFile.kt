@@ -26,6 +26,8 @@ class ExtendedFile : File {
         , SHA256
         , SHA384
         , SHA512
+        , SHA512224
+        , SHA512256
         , SHA3224
         , SHA3256
         , SHA3384
@@ -372,6 +374,8 @@ class ExtendedFile : File {
             "SHA-256", "sha-256", "SHA256","sha256" -> ExtendedFile.EHash.SHA256
             "SHA-384", "sha-384", "SHA384", "sha384" -> ExtendedFile.EHash.SHA384
             "SHA-512", "sha-512", "SHA512", "sha512" -> ExtendedFile.EHash.SHA512
+            "SHA-512/224", "SHA-512224", "sha-512224", "sha-512/224", "SHA512224", "sha512224" -> ExtendedFile.EHash.SHA512224
+            "SHA-512/256", "SHA-512256", "sha-512256", "sha-512/256", "SHA512256", "sha512256" -> ExtendedFile.EHash.SHA512256
             "SHA3-224", "sha3-224", "SHA3224", "sha3224" -> ExtendedFile.EHash.SHA3224
             "SHA3-256", "sha3-256", "SHA3256", "sha3256" -> ExtendedFile.EHash.SHA3256
             "SHA3-384", "sha3-384", "SHA3384", "sha3384" -> ExtendedFile.EHash.SHA3384
@@ -388,6 +392,8 @@ class ExtendedFile : File {
             ExtendedFile.EHash.SHA256 -> SHA256
             ExtendedFile.EHash.SHA384 -> SHA384
             ExtendedFile.EHash.SHA512 -> SHA512
+            ExtendedFile.EHash.SHA512224 -> SHA512224
+            ExtendedFile.EHash.SHA512256 -> SHA512256
             ExtendedFile.EHash.SHA3224 -> SHA3224
             ExtendedFile.EHash.SHA3256 -> SHA3256
             ExtendedFile.EHash.SHA3384 -> SHA3384

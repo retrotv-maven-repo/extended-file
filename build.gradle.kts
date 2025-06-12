@@ -1,17 +1,23 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import com.vanniktech.maven.publish.SonatypeHost
 import java.net.URI
 
 plugins {
     java
     jacoco
-    `maven-publish`
-    kotlin("jvm") version "2.0.21"
+    kotlin("jvm") version "2.1.10"
     id("org.jetbrains.dokka") version "2.0.0"
     id("org.sonarqube") version "4.0.0.2929"
+    id("com.vanniktech.maven.publish") version "0.32.0"
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
 }
 
 group = "dev.retrotv"
-version = "1.2.0"
+version = "1.2.1"
 
 // Github Action 버전 출력용
 tasks.register("printVersionName") {
@@ -64,10 +70,48 @@ tasks {
     }
 }
 
+mavenPublishing {
+    coordinates(
+        groupId = "dev.retrotv",
+        artifactId = "extended-file",
+        version = version.toString()
+    )
+
+    pom {
+        name.set("extended-file")
+        description.set("Expanded file library")
+        inceptionYear.set("2025")
+        url.set("https://github.com/retrotv-maven-repo/extended-file")
+
+        licenses {
+            license {
+                name.set("The Apache License, Version 2.0")
+                url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
+            }
+        }
+
+        developers {
+            developer {
+                id.set("yjj8353")
+                name.set("JaeJun Yang")
+                email.set("yjj8353@gmail.com")
+            }
+        }
+
+        scm {
+            connection.set("scm:git:git://github.com/retrotv-maven-repo/extended-file.git")
+            developerConnection.set("scm:git:ssh://github.com/retrotv-maven-repo/extended-file.git")
+            url.set("https://github.com/retrotv-maven-repo/extended-file.git")
+        }
+    }
+
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+
+    signAllPublications()
+}
+
 publishing {
     repositories {
-
-        // Github Packages에 배포하기 위한 설정
         maven {
             name = "GitHubPackages"
             url = URI("https://maven.pkg.github.com/retrotv-maven-repo/extended-file")
@@ -75,15 +119,6 @@ publishing {
                 username = System.getenv("USERNAME")
                 password = System.getenv("PASSWORD")
             }
-        }
-    }
-
-    publications {
-        create<MavenPublication>("maven") {
-            groupId = project.group.toString()
-            artifactId = project.name
-            version = project.version.toString()
-            from(components["java"])
         }
     }
 }
