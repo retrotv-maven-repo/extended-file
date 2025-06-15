@@ -104,11 +104,7 @@ mavenPublishing {
 
 tasks.withType<Sign>().configureEach {
     onlyIf {
-        !project.hasProperty("skipSigning") && (
-            project.hasProperty("ORG_GRADLE_PROJECT_signingInMemoryKeyId") ||
-            project.hasProperty("ORG_GRADLE_PROJECT_signingInMemoryKeyPassword") ||
-            System.getenv("ORG_GRADLE_PROJECT_signingInMemoryKey") != null
-        )
+        !project.hasProperty("skipSigning") && System.getenv("USERNAME") != null
     }
 }
 
