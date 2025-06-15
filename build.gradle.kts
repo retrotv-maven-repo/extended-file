@@ -21,11 +21,6 @@ tasks.register("printVersionName") {
     println(project.version)
 }
 
-java {
-    withJavadocJar()
-    withSourcesJar()
-}
-
 repositories {
     mavenCentral()
     maven { setUrl("https://jitpack.io") }
