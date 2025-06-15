@@ -104,7 +104,7 @@ mavenPublishing {
 
 tasks.withType<Sign>().configureEach {
     onlyIf {
-        !project.hasProperty("skipSigning") && System.getenv("USERNAME") != null
+        !project.hasProperty("skipSigning") && System.getenv("GITHUB_ACTOR") != null
     }
 }
 
