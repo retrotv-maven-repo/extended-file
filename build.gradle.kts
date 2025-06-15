@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "dev.retrotv"
-version = "1.2.9"
+version = "1.2.10"
 
 // Github Action 버전 출력용
 tasks.register("printVersionName") {
@@ -100,24 +100,18 @@ mavenPublishing {
             url.set("https://github.com/retrotv-maven-repo/extended-file.git")
         }
     }
-}
 
-tasks.withType<Sign>().configureEach {
-    onlyIf {
-        !project.hasProperty("skipSigning") && System.getenv("USERNAME") != null
-    }
-}
+    publishing {
+        repositories {
 
-publishing {
-    repositories {
-
-        // Github Packages에 배포하기 위한 설정
-        maven {
-            name = "GitHubPackages"
-            url = URI("https://maven.pkg.github.com/retrotv-maven-repo/extended-file")
-            credentials {
-                username = System.getenv("USERNAME")
-                password = System.getenv("PASSWORD")
+            // Github Packages에 배포하기 위한 설정
+            maven {
+                name = "GitHubPackages"
+                url = URI("https://maven.pkg.github.com/retrotv-maven-repo/extended-file")
+                credentials {
+                    username = System.getenv("USERNAME")
+                    password = System.getenv("PASSWORD")
+                }
             }
         }
     }
