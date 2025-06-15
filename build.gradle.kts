@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "dev.retrotv"
-version = "1.2.7"
+version = "1.2.8"
 
 // Github Action 버전 출력용
 tasks.register("printVersionName") {
@@ -104,7 +104,7 @@ mavenPublishing {
 
 tasks.withType<Sign>().configureEach {
     onlyIf {
-        !project.hasProperty("skipSigning")
+        !project.hasProperty("skipSigning") && System.getenv("USERNAME") != null
     }
 }
 
