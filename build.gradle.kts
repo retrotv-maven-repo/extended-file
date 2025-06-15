@@ -75,7 +75,7 @@ mavenPublishing {
 
     signAllPublications()
 
-    coordinates(group.toString(), "fibonacci", version.toString())
+    coordinates(group.toString(), project.name, version.toString())
 
     pom {
         name.set("extended-file")
