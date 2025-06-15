@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "dev.retrotv"
-version = "1.2.6"
+version = "1.2.7"
 
 // Github Action 버전 출력용
 tasks.register("printVersionName") {
@@ -99,6 +99,12 @@ mavenPublishing {
             developerConnection.set("scm:git:ssh://github.com/retrotv-maven-repo/extended-file.git")
             url.set("https://github.com/retrotv-maven-repo/extended-file.git")
         }
+    }
+}
+
+tasks.withType<Sign>().configureEach {
+    onlyIf {
+        !project.hasProperty("skipSigning")
     }
 }
 
