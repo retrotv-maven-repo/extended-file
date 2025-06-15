@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "dev.retrotv"
-version = "1.2.3"
+version = "1.2.4"
 
 // Github Action 버전 출력용
 tasks.register("printVersionName") {
