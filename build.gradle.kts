@@ -1,5 +1,6 @@
 import com.vanniktech.maven.publish.SonatypeHost
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.net.URI
 
 plugins {
     java
@@ -12,18 +13,13 @@ plugins {
 }
 
 group = "dev.retrotv"
-version = "1.2.3"
+version = "1.2.4"
 
 // Github Action 버전 출력용
 tasks.register("printVersionName") {
     description = "이 프로젝트의 버전을 출력합니다."
     group = JavaBasePlugin.DOCUMENTATION_GROUP
     println(project.version)
-}
-
-java {
-    withJavadocJar()
-    withSourcesJar()
 }
 
 repositories {
@@ -75,7 +71,7 @@ mavenPublishing {
 
     signAllPublications()
 
-    coordinates(group.toString(), "fibonacci", version.toString())
+    coordinates(group.toString(), project.name, version.toString())
 
     pom {
         name.set("extended-file")
@@ -104,115 +100,20 @@ mavenPublishing {
             url.set("https://github.com/retrotv-maven-repo/extended-file.git")
         }
     }
+
+    repositories {
+
+        // Github Packages에 배포하기 위한 설정
+        maven {
+            name = "GitHubPackages"
+            url = URI("https://maven.pkg.github.com/retrotv-maven-repo/extended-file")
+            credentials {
+                username = System.getenv("USERNAME")
+                password = System.getenv("PASSWORD")
+            }
+        }
+    }
 }
-
-//configure<PublishingExtension> {
-//    publications {
-//        register<MavenPublication>("maven") {
-//            from(components["java"])
-//            groupId = project.group.toString()
-//            artifactId = project.name
-//            version = project.version.toString()
-//
-//            pom {
-//                name.set("extended-file")
-//                description.set("Java의 File 클래스를 확장한 라이브러리 입니다.")
-//                inceptionYear.set("2025")
-//                url.set("https://github.com/retrotv-maven-repo/extended-file")
-//
-//                licenses {
-//                    license {
-//                        name.set("The Apache License, Version 2.0")
-//                        url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
-//                    }
-//                }
-//
-//                developers {
-//                    developer {
-//                        id.set("yjj8353")
-//                        name.set("JaeJun Yang")
-//                        email.set("yjj8353@gmail.com")
-//                    }
-//                }
-//
-//                scm {
-//                    connection.set("scm:git:git://github.com/retrotv-maven-repo/extended-file.git")
-//                    developerConnection.set("scm:git:ssh://github.com/retrotv-maven-repo/extended-file.git")
-//                    url.set("https://github.com/retrotv-maven-repo/extended-file.git")
-//                }
-//            }
-//
-//            repositories {
-//                maven {
-//                    url = layout.buildDirectory.dir("staging-deploy").get().asFile.toURI()
-//                }
-//            }
-//        }
-//    }
-//}
-
-//publishing {
-//    publications {
-//        create<MavenPublication>("maven") {
-//            from(components["java"])
-//            groupId = project.group.toString()
-//            artifactId = project.name
-//            version = project.version.toString()
-//
-//            pom {
-//                name.set("extended-file")
-//                description.set("Java의 File 클래스를 확장한 라이브러리 입니다.")
-//                inceptionYear.set("2025")
-//                url.set("https://github.com/retrotv-maven-repo/extended-file")
-//
-//                licenses {
-//                    license {
-//                        name.set("The Apache License, Version 2.0")
-//                        url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
-//                    }
-//                }
-//
-//                developers {
-//                    developer {
-//                        id.set("yjj8353")
-//                        name.set("JaeJun Yang")
-//                        email.set("yjj8353@gmail.com")
-//                    }
-//                }
-//
-//                scm {
-//                    connection.set("scm:git:git://github.com/retrotv-maven-repo/extended-file.git")
-//                    developerConnection.set("scm:git:ssh://github.com/retrotv-maven-repo/extended-file.git")
-//                    url.set("https://github.com/retrotv-maven-repo/extended-file.git")
-//                }
-//            }
-//        }
-//    }
-//}
-
-//publishing {
-//    repositories {
-//
-//        // Github Packages에 배포하기 위한 설정
-//        maven {
-//            name = "GitHubPackages"
-//            url = URI("https://maven.pkg.github.com/retrotv-maven-repo/extended-file")
-//            credentials {
-//                username = System.getenv("USERNAME")
-//                password = System.getenv("PASSWORD")
-//            }
-//        }
-//    }
-//
-//    publications {
-//        create<MavenPublication>("maven") {
-//            groupId = project.group.toString()
-//            artifactId = project.name
-//            version = project.version.toString()
-//            from(components["java"])
-//        }
-//    }
-//}
 
 kotlin {
     jvmToolchain(8)
