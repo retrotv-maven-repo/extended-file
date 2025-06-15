@@ -116,8 +116,8 @@ publishing {
             name = "GitHubPackages"
             url = URI("https://maven.pkg.github.com/retrotv-maven-repo/extended-file")
             credentials {
-                username = System.getenv("USERNAME")
-                password = System.getenv("PASSWORD")
+                username = System.getenv("GITHUB_ACTOR") ?: project.findProperty("gpr.user") as String?
+                password = System.getenv("GITHUB_TOKEN") ?: project.findProperty("gpr.key") as String?
             }
         }
     }
