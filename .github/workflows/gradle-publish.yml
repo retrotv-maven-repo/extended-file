@@ -45,7 +45,7 @@ jobs:
       # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
       # the publishing section of your build.gradle
       - name: Publish to GitHub Packages
-        run: ./gradlew publishMavenPublicationToGitHubPackagesRepository
+        run: ./gradlew publishMavenPublicationToGitHubPackagesRepository -PskipSigning
         env:
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PACKAGE_TOKEN }}
