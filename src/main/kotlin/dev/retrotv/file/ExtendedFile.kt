@@ -20,7 +20,8 @@ import kotlin.math.pow
  */
 class ExtendedFile : File {
     enum class EHash {
-          MD5
+          CRC32
+        , MD5
         , SHA1
         , SHA224
         , SHA256
@@ -368,6 +369,7 @@ class ExtendedFile : File {
 
     private fun selectHashAlgorithm(hash: String): ExtendedFile.EHash {
         return when (hash) {
+            "CRC32", "crc32", "CRC-32", "crc-32" -> ExtendedFile.EHash.CRC32
             "MD5", "md5" -> ExtendedFile.EHash.MD5
             "SHA-1", "sha-1", "SHA1", "sha1" -> ExtendedFile.EHash.SHA1
             "SHA-224", "sha-224", "SHA224", "sha224" -> ExtendedFile.EHash.SHA224
@@ -386,6 +388,7 @@ class ExtendedFile : File {
 
     private fun selectHashAlgorithm(hash: ExtendedFile.EHash): dev.retrotv.crypto.enums.EHash {
         return when (hash) {
+            ExtendedFile.EHash.CRC32 -> CRC32
             ExtendedFile.EHash.MD5 -> MD5
             ExtendedFile.EHash.SHA1 -> SHA1
             ExtendedFile.EHash.SHA224 -> SHA224
