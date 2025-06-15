@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "dev.retrotv"
-version = "1.2.10"
+version = "1.2.11"
 
 // Github Action 버전 출력용
 tasks.register("printVersionName") {
@@ -114,6 +114,14 @@ mavenPublishing {
                 }
             }
         }
+    }
+}
+
+tasks.withType<Sign>().configureEach {
+    onlyIf {
+
+        // 로컬 배포 시에는 서명하지 않도록 설정
+        !gradle.taskGraph.hasTask(":publishMavenPublicationToMavenLocal")
     }
 }
 
