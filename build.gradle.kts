@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "dev.retrotv"
-version = "1.2.12"
+version = "1.2.13"
 
 // Github Action 버전 출력용
 tasks.register("printVersionName") {
@@ -28,7 +28,7 @@ repositories {
 }
 
 val cryptography = "0.47.0-alpha"
-val dataUtils = "0.21.6-alpha"
+val dataUtils = "0.23.0-alpha"
 val tika = "2.9.2" // tika 3.0.0 부터 java 11을 요구하므로 바꾸지 말 것
 val poi = "5.4.0"
 val junit = "5.11.4"
@@ -37,7 +37,7 @@ val log4j = "2.24.3"
 
 dependencies {
     implementation("com.github.retrotv-maven-repo:cryptography:${cryptography}")
-    implementation("com.github.retrotv-maven-repo:data-utils:${dataUtils}")
+    implementation("dev.retrotv:data-utils:${dataUtils}")
 
     implementation("org.apache.tika:tika-core:${tika}")
     implementation("org.apache.tika:tika-parsers:${tika}")
@@ -121,7 +121,7 @@ tasks.withType<Sign>().configureEach {
     onlyIf {
 
         // 로컬 및 깃허브 패키지 배포 시에는 서명하지 않도록 설정
-        !gradle.taskGraph.hasTask(":publishMavenPublicationToMavenLocal") || !gradle.taskGraph.hasTask(":publishMavenPublicationToGitHubPackagesRepository")
+        !gradle.taskGraph.hasTask(":publishMavenPublicationToMavenLocal") && !gradle.taskGraph.hasTask(":publishMavenPublicationToGitHubPackagesRepository")
     }
 }
 
