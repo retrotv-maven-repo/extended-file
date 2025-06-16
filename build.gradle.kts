@@ -121,7 +121,7 @@ tasks.withType<Sign>().configureEach {
     onlyIf {
 
         // 로컬 및 깃허브 패키지 배포 시에는 서명하지 않도록 설정
-        !gradle.taskGraph.hasTask(":publishMavenPublicationToMavenLocal") || !gradle.taskGraph.hasTask(":publishMavenPublicationToGitHubPackagesRepository")
+        !gradle.taskGraph.hasTask(":publishMavenPublicationToMavenLocal") && !gradle.taskGraph.hasTask(":publishMavenPublicationToGitHubPackagesRepository")
     }
 }
 
