@@ -9,7 +9,7 @@ plugins {
     kotlin("jvm") version "2.1.21"
     id("com.vanniktech.maven.publish") version "0.32.0"
     id("org.jetbrains.dokka") version "2.0.0"
-    id("org.sonarqube") version "6.2.0.5505"
+    id("org.sonarqube") version "4.0.0.2929"
 }
 
 group = "dev.retrotv"
