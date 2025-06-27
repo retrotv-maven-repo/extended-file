@@ -35,6 +35,7 @@ val slf4j = "2.0.16"
 val log4j = "2.24.3"
 
 dependencies {
+    implementation("dev.retrotv:cryptography-core:${cryptography}")
     implementation("dev.retrotv:cryptography-hash:${cryptography}")
     implementation("dev.retrotv:data-utils:${dataUtils}")
 
