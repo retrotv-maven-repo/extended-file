@@ -24,19 +24,18 @@ tasks.register("printVersionName") {
 
 repositories {
     mavenCentral()
-    maven { setUrl("https://jitpack.io") }
 }
 
-val cryptography = "0.47.0-alpha"
+val cryptography = "0.51.0-alpha"
 val dataUtils = "0.23.0-alpha"
 val tika = "2.9.4" // tika 3.0.0 부터 java 11을 요구하므로 바꾸지 말 것
 val poi = "5.4.0"
-val junit = "5.11.4"
+val junit = "5.13.1"
 val slf4j = "2.0.16"
 val log4j = "2.24.3"
 
 dependencies {
-    implementation("com.github.retrotv-maven-repo:cryptography:${cryptography}")
+    implementation("dev.retrotv:cryptography-hash:${cryptography}")
     implementation("dev.retrotv:data-utils:${dataUtils}")
 
     implementation("org.apache.tika:tika-core:${tika}")
