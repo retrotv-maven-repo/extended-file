@@ -4,7 +4,6 @@ import dev.retrotv.crypto.enums.EHash.*
 import dev.retrotv.crypto.hash.Hash
 import dev.retrotv.crypto.util.CodecUtils
 import org.apache.tika.Tika
-import org.apache.tika.metadata.Metadata
 import java.io.File
 import java.io.IOException
 import java.net.URI
@@ -125,11 +124,7 @@ class ExtendedFile : File {
     @Throws(IOException::class)
     fun getMimeType(): String {
         val tika = Tika()
-        val metadata = Metadata()
-        tika.parse(this, metadata)
-
-        // tika.parse() 메서드 실행 후, metadata에 Content-Type이 저장됨
-        return metadata["Content-Type"]
+        return tika.detect(this)
     }
 
     /**

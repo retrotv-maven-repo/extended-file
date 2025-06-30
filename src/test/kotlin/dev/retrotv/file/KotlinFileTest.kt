@@ -13,6 +13,8 @@ import java.util.*
 import org.junit.jupiter.api.Assertions.*
 
 class KotlinFileTest {
+    private val wordFile = this.javaClass.getClassLoader().getResource("test.docx")
+    private val notWordFile = this.javaClass.getClassLoader().getResource("not_word.docx")
     private val textFile = this.javaClass.getClassLoader().getResource("text_file")
     private val textFileCopy = this.javaClass.getClassLoader().getResource("text_file_copy")
     private val textFileDifferent = this.javaClass.getClassLoader().getResource("text_file_different")
@@ -23,8 +25,14 @@ class KotlinFileTest {
     @Test
     @DisplayName("getMimeType() 메서드 테스트")
     fun test_getMimeType() {
-        val file = ExtendedFile(Objects.requireNonNull(textFile).toURI())
+        var file = ExtendedFile(Objects.requireNonNull(textFile).toURI())
         assertTrue(file.getMimeType().startsWith("text/plain"))
+
+        file = ExtendedFile(Objects.requireNonNull(wordFile).toURI())
+        assertTrue(file.getMimeType().startsWith("application/vnd.openxmlformats-officedocument.wordprocessingml.document"))
+
+        file = ExtendedFile(Objects.requireNonNull(notWordFile).toURI())
+        assertFalse(file.getMimeType().startsWith("application/vnd.openxmlformats-officedocument.wordprocessingml.document"))
     }
 
     @Test
