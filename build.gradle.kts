@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "dev.retrotv"
-version = "1.4.0"
+version = "1.4.1"
 
 // Github Action 버전 출력용
 tasks.register("printVersionName") {
@@ -41,7 +41,7 @@ dependencies {
 
     // Apache Tika
     implementation("org.apache.tika:tika-core:${tika}")
-    implementation("org.apache.tika:tika-parsers:${tika}")
+    implementation("org.apache.tika:tika-parsers-standard-package:${tika}")
 
     // Apache POI
     implementation("org.apache.poi:poi-ooxml:${poi}")

@@ -18,6 +18,14 @@ import kotlin.math.pow
  * @since 1.0.0
  */
 class ExtendedFile : File {
+
+    /**
+     * 파일 해시 알고리즘을 정의하는 열거형 클래스입니다.
+     * 지원하는 해시 알고리즘은 CRC32, MD5, SHA1, SHA224, SHA256, SHA384, SHA512, SHA512224, SHA512256, SHA3224, SHA3256, SHA3384, SHA3512 입니다.
+     *
+     * @author yjj8353
+     * @since 1.0.0
+     */
     enum class EHash {
           CRC32
         , MD5
