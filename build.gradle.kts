@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "dev.retrotv"
-version = "1.4.1"
+version = "1.4.2"
 
 // Github Action 버전 출력용
 tasks.register("printVersionName") {
@@ -29,10 +29,10 @@ repositories {
 val cryptography = "0.51.0-alpha"
 val dataUtils = "0.23.0-alpha"
 val tika = "2.9.4" // tika 3.0.0 부터 java 11을 요구하므로 바꾸지 말 것
-val poi = "5.4.0"
-val junit = "5.13.1"
-val slf4j = "2.0.16"
-val log4j = "2.24.3"
+val poi = "5.4.1"
+val junit = "5.13.4"
+val slf4j = "2.0.17"
+val log4j = "2.25.1"
 
 dependencies {
     implementation("dev.retrotv:cryptography-core:${cryptography}")
