@@ -13,7 +13,11 @@ plugins {
 }
 
 group = "dev.retrotv"
-version = "1.4.2"
+version = "1.4.3"
+
+tasks.withType(JavaCompile::class) {
+    options.encoding = "UTF-8"
+}
 
 // Github Action 버전 출력용
 tasks.register("printVersionName") {
@@ -26,8 +30,8 @@ repositories {
     mavenCentral()
 }
 
-val cryptography = "0.51.0-alpha"
-val dataUtils = "0.23.0-alpha"
+val cryptography = "0.51.1-alpha"
+val dataUtils = "0.23.3-alpha"
 val tika = "2.9.4" // tika 3.0.0 부터 java 11을 요구하므로 바꾸지 말 것
 val poi = "5.4.1"
 val junit = "5.13.4"
@@ -48,9 +52,10 @@ dependencies {
     implementation("org.apache.poi:poi:${poi}")
 
     // Logger
-    implementation("org.slf4j:slf4j-api:${slf4j}")
-    implementation("org.apache.logging.log4j:log4j-core:${log4j}")
-    implementation("org.apache.logging.log4j:log4j-api:${log4j}")
+    compileOnly("org.slf4j:slf4j-api:${slf4j}")
+    testImplementation("org.slf4j:slf4j-api:${slf4j}")
+    testImplementation("org.apache.logging.log4j:log4j-core:${log4j}")
+    testImplementation("org.apache.logging.log4j:log4j-slf4j2-impl:${log4j}")
 
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter:${junit}")
