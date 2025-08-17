@@ -39,6 +39,10 @@ val slf4j = "2.0.17"
 val log4j = "2.25.1"
 
 dependencies {
+    configurations.all {
+        exclude(group = "com.fasterxml.jackson.module", module = "jackson-module-kotlin")
+    }
+
     implementation("dev.retrotv:cryptography-core:${cryptography}")
     implementation("dev.retrotv:cryptography-hash:${cryptography}")
     implementation("dev.retrotv:data-utils:${dataUtils}")
