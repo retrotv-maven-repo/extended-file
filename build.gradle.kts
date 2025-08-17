@@ -30,8 +30,8 @@ repositories {
     mavenCentral()
 }
 
-val cryptography = "0.51.1-alpha"
-val dataUtils = "0.23.3-alpha"
+val cryptography = "0.51.2-alpha"
+val dataUtils = "0.23.7-alpha"
 val tika = "2.9.4" // tika 3.0.0 부터 java 11을 요구하므로 바꾸지 말 것
 val poi = "5.4.1"
 val junit = "5.13.4"
@@ -39,10 +39,6 @@ val slf4j = "2.0.17"
 val log4j = "2.25.1"
 
 dependencies {
-    configurations.all {
-        exclude(group = "com.fasterxml.jackson.module", module = "jackson-module-kotlin")
-    }
-
     implementation("dev.retrotv:cryptography-core:${cryptography}")
     implementation("dev.retrotv:cryptography-hash:${cryptography}")
     implementation("dev.retrotv:data-utils:${dataUtils}")
