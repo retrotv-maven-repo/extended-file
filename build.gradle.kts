@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "dev.retrotv"
-version = "1.4.3"
+version = "1.4.4"
 
 tasks.withType(JavaCompile::class) {
     options.encoding = "UTF-8"
@@ -30,8 +30,8 @@ repositories {
     mavenCentral()
 }
 
-val cryptography = "0.51.1-alpha"
-val dataUtils = "0.23.3-alpha"
+val cryptography = "0.51.2-alpha"
+val dataUtils = "0.23.7-alpha"
 val tika = "2.9.4" // tika 3.0.0 부터 java 11을 요구하므로 바꾸지 말 것
 val poi = "5.4.1"
 val junit = "5.13.4"
