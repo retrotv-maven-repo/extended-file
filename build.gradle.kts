@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "dev.retrotv"
-version = "1.4.3"
+version = "1.4.4"
 
 tasks.withType(JavaCompile::class) {
     options.encoding = "UTF-8"
