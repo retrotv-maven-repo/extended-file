@@ -22,6 +22,10 @@ java {
 group = "dev.retrotv"
 version = "1.5.0"
 
+tasks.withType(JavaCompile::class) {
+    options.encoding = "UTF-8"
+}
+
 // Github Action 버전 출력용
 tasks.register("printVersionName") {
     description = "이 프로젝트의 버전을 출력합니다."
@@ -59,9 +63,10 @@ dependencies {
     implementation("org.apache.poi:poi:${poi}")
 
     // Logger
-    implementation("org.slf4j:slf4j-api:${slf4j}")
-    implementation("org.apache.logging.log4j:log4j-core:${log4j}")
-    implementation("org.apache.logging.log4j:log4j-api:${log4j}")
+    compileOnly("org.slf4j:slf4j-api:${slf4j}")
+    testImplementation("org.slf4j:slf4j-api:${slf4j}")
+    testImplementation("org.apache.logging.log4j:log4j-core:${log4j}")
+    testImplementation("org.apache.logging.log4j:log4j-slf4j2-impl:${log4j}")
 
     // JUnit 5
     testImplementation(platform("org.junit:junit-bom:${junit}"))
