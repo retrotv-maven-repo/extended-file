@@ -1,19 +1,26 @@
 import com.vanniktech.maven.publish.SonatypeHost
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.net.URI
 
 plugins {
-    java
-    jacoco
-    `maven-publish`
-    kotlin("jvm") version "2.1.21"
+    id("java")
+    id("jacoco")
+    id("maven-publish")
     id("com.vanniktech.maven.publish") version "0.32.0"
-    id("org.jetbrains.dokka") version "2.0.0"
     id("org.sonarqube") version "4.0.0.2929"
 }
 
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+    }
+}
+
 group = "dev.retrotv"
-version = "1.4.2"
+version = "1.5.0"
 
 // Github Action 버전 출력용
 tasks.register("printVersionName") {
@@ -28,6 +35,7 @@ repositories {
 
 val cryptography = "0.51.0-alpha"
 val dataUtils = "0.23.0-alpha"
+val lombok = "1.18.38"
 val tika = "2.9.4" // tika 3.0.0 부터 java 11을 요구하므로 바꾸지 말 것
 val poi = "5.4.1"
 val junit = "5.13.4"
@@ -38,6 +46,9 @@ dependencies {
     implementation("dev.retrotv:cryptography-core:${cryptography}")
     implementation("dev.retrotv:cryptography-hash:${cryptography}")
     implementation("dev.retrotv:data-utils:${dataUtils}")
+
+    // Lombok
+    implementation("org.projectlombok:lombok:${lombok}")
 
     // Apache Tika
     implementation("org.apache.tika:tika-core:${tika}")
@@ -52,20 +63,10 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-core:${log4j}")
     implementation("org.apache.logging.log4j:log4j-api:${log4j}")
 
-    testImplementation(kotlin("test"))
-    testImplementation("org.junit.jupiter:junit-jupiter:${junit}")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:${junit}")
-    testImplementation("org.junit.jupiter:junit-jupiter-engine:${junit}")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:${junit}")
-}
-
-tasks {
-    compileKotlin {
-        compilerOptions.jvmTarget.set(JvmTarget.JVM_1_8)
-    }
-    compileTestKotlin {
-        compilerOptions.jvmTarget.set(JvmTarget.JVM_1_8)
-    }
+    // JUnit 5
+    testImplementation(platform("org.junit:junit-bom:${junit}"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 mavenPublishing {
@@ -125,10 +126,6 @@ tasks.withType<Sign>().configureEach {
         // 로컬 및 깃허브 패키지 배포 시에는 서명하지 않도록 설정
         !gradle.taskGraph.hasTask(":publishMavenPublicationToMavenLocal") && !gradle.taskGraph.hasTask(":publishMavenPublicationToGitHubPackagesRepository")
     }
-}
-
-kotlin {
-    jvmToolchain(8)
 }
 
 apply(from = "${rootDir}/gradle/sonarcloud.gradle")
