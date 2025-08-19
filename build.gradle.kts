@@ -22,10 +22,6 @@ java {
 group = "dev.retrotv"
 version = "1.5.0"
 
-tasks.withType(JavaCompile::class) {
-    options.encoding = "UTF-8"
-}
-
 // Github Action 버전 출력용
 tasks.register("printVersionName") {
     description = "이 프로젝트의 버전을 출력합니다."
