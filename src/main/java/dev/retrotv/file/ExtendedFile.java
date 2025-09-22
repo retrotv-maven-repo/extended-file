@@ -1,7 +1,8 @@
 package dev.retrotv.file;
 
+import dev.retrotv.crypto.util.HEXCodecUtils;
 import dev.retrotv.crypto.hash.Hash;
-import dev.retrotv.crypto.util.CodecUtils;
+
 import lombok.NonNull;
 import org.apache.tika.Tika;
 
@@ -289,7 +290,7 @@ public class ExtendedFile extends File {
      */
     public String getHash(@NonNull EHash hash) throws IOException {
         Hash hashInstance = Hash.getInstance(selectHashAlgorithm(hash));
-        return CodecUtils.encode(hashInstance.hashing(Files.readAllBytes(this.toPath())));
+        return HEXCodecUtils.encode(hashInstance.hashing(Files.readAllBytes(this.toPath())));
     }
 
     /**
@@ -503,34 +504,34 @@ public class ExtendedFile extends File {
     }
 
     // 선택한 해시 알고리즘을 dev.retrotv.crypto.enums.EHash로 변환
-    private dev.retrotv.crypto.enums.EHash selectHashAlgorithm(@NonNull EHash hash) {
+    private dev.retrotv.crypto.hash.enums.EHash selectHashAlgorithm(@NonNull EHash hash) {
         switch (hash) {
             case CRC32:
-                return dev.retrotv.crypto.enums.EHash.CRC32;
+                return dev.retrotv.crypto.hash.enums.EHash.CRC32;
             case MD5:
-                return dev.retrotv.crypto.enums.EHash.MD5;
+                return dev.retrotv.crypto.hash.enums.EHash.MD5;
             case SHA1:
-                return dev.retrotv.crypto.enums.EHash.SHA1;
+                return dev.retrotv.crypto.hash.enums.EHash.SHA1;
             case SHA224:
-                return dev.retrotv.crypto.enums.EHash.SHA224;
+                return dev.retrotv.crypto.hash.enums.EHash.SHA224;
             case SHA256:
-                return dev.retrotv.crypto.enums.EHash.SHA256;
+                return dev.retrotv.crypto.hash.enums.EHash.SHA256;
             case SHA384:
-                return dev.retrotv.crypto.enums.EHash.SHA384;
+                return dev.retrotv.crypto.hash.enums.EHash.SHA384;
             case SHA512:
-                return dev.retrotv.crypto.enums.EHash.SHA512;
+                return dev.retrotv.crypto.hash.enums.EHash.SHA512;
             case SHA512224:
-                return dev.retrotv.crypto.enums.EHash.SHA512224;
+                return dev.retrotv.crypto.hash.enums.EHash.SHA512224;
             case SHA512256:
-                return dev.retrotv.crypto.enums.EHash.SHA512256;
+                return dev.retrotv.crypto.hash.enums.EHash.SHA512256;
             case SHA3224:
-                return dev.retrotv.crypto.enums.EHash.SHA3224;
+                return dev.retrotv.crypto.hash.enums.EHash.SHA3224;
             case SHA3256:
-                return dev.retrotv.crypto.enums.EHash.SHA3256;
+                return dev.retrotv.crypto.hash.enums.EHash.SHA3256;
             case SHA3384:
-                return dev.retrotv.crypto.enums.EHash.SHA3384;
+                return dev.retrotv.crypto.hash.enums.EHash.SHA3384;
             case SHA3512:
-                return dev.retrotv.crypto.enums.EHash.SHA3512;
+                return dev.retrotv.crypto.hash.enums.EHash.SHA3512;
             default:
                 throw new IllegalArgumentException("지원하지 않는 해시 알고리즘입니다: " + hash);
         }

@@ -20,7 +20,7 @@ java {
 }
 
 group = "dev.retrotv"
-version = "1.5.1"
+version = "1.6.0"
 
 // Github Action 버전 출력용
 tasks.register("printVersionName") {
@@ -33,7 +33,7 @@ repositories {
     mavenCentral()
 }
 
-val cryptography = "0.51.2-alpha"
+val cryptography = "0.60.0-alpha"
 val dataUtils = "0.24.2-alpha"
 val lombok = "1.18.38"
 val tika = "2.9.4" // tika 3.0.0 부터 java 11을 요구하므로 바꾸지 말 것
