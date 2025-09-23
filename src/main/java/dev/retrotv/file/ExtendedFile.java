@@ -98,7 +98,7 @@ public class ExtendedFile extends File {
      * @since 1.0.0
      * @return 파일 확장자
      */
-    public String getExtension() {
+    @NonNull public String getExtension() {
         if (this.isDirectory()) {
             return "";
         }
@@ -114,7 +114,7 @@ public class ExtendedFile extends File {
 
     /**
      * 파일 및 디렉터리명을 반환합니다.
-     * isRemoveExtension 매개변수를 true로 설정하면, 확장자를 제거한 파일명을 반환합니다. (기본 값: false)
+     * removeExtension 매개변수를 true로 설정하면, 확장자를 제거한 파일명을 반환합니다.
      * 해당 경로가 디렉터리인 경우, isRemoveExtension 매개변수의 값과 관계없이 디렉터리명을 반환합니다.
      *
      * @author yjj8353
@@ -123,7 +123,7 @@ public class ExtendedFile extends File {
      * @return 파일명
      * @throws SecurityException 파일 및 디렉터리 접근 권한이 없으면 던져짐
      */
-    public String getName(boolean removeExtension) {
+    @NonNull public String getName(boolean removeExtension) {
         if (this.isDirectory() || !removeExtension) {
             return this.getName();
         } else {
@@ -139,7 +139,7 @@ public class ExtendedFile extends File {
      * @return 파일의 MIME type
      * @throws IOException 파일을 읽어들이는 과정 혹은 파싱 도중에 오류가 발생하면 던져짐
      */
-    public String getMimeType() throws IOException {
+    @NonNull public String getMimeType() throws IOException {
         Tika tika = new Tika();
         return tika.detect(this);
     }
@@ -204,6 +204,15 @@ public class ExtendedFile extends File {
         return getMimeType().equals(mimeType);
     }
 
+    /**
+     * 파일의 해시 코드를 생성해서, 동일한 파일인지 여부를 반환합니다.
+     * SHA-256 알고리즘을 사용합니다.
+     *
+     * @author yjj8353
+     * @since 1.0.0
+     * @param file 비교할 [File] 객체
+     * @return 동일한 파일인지 여부
+     */
     public boolean matches(@NonNull File file) throws IOException {
         return matches(file, EHash.SHA256);
     }
@@ -274,7 +283,16 @@ public class ExtendedFile extends File {
         return true;
     }
 
-    public String getHash() throws IOException {
+    /**
+     * 파일의 해시 코드를 생성해서 반환합니다.
+     * SHA-256 알고리즘을 사용합니다.
+     *
+     * @author yjj8353
+     * @since 1.0.0
+     * @return 파일의 해시 코드
+     * @throws IOException 파일을 읽어들이는 과정에서 오류가 발생하면 던져짐
+     */
+    @NonNull public String getHash() throws IOException {
         return getHash(EHash.SHA256);
     }
 
@@ -288,7 +306,7 @@ public class ExtendedFile extends File {
      * @return 파일의 해시 코드
      * @throws IOException 파일을 읽어들이는 과정에서 오류가 발생하면 던져짐
      */
-    public String getHash(@NonNull EHash hash) throws IOException {
+    @NonNull public String getHash(@NonNull EHash hash) throws IOException {
         Hash hashInstance = Hash.getInstance(selectHashAlgorithm(hash));
         return HEXCodecUtils.encode(hashInstance.hashing(Files.readAllBytes(this.toPath())));
     }
@@ -303,7 +321,7 @@ public class ExtendedFile extends File {
      * @return 파일의 해시 코드
      * @throws IOException 파일을 읽어들이는 과정에서 오류가 발생하면 던져짐
      */
-    public String getHash(@NonNull String hash) throws IOException {
+    @NonNull public String getHash(@NonNull String hash) throws IOException {
         return getHash(selectHashAlgorithm(hash));
     }
 
@@ -316,7 +334,7 @@ public class ExtendedFile extends File {
      * @return 파일의 크기
      * @throws SecurityException – 파일 및 디렉터리 접근 권한이 없으면 던져짐
      */
-    public String getSize() throws SecurityException {
+    @NonNull public String getSize() throws SecurityException {
         return getSize(true);
     }
 
@@ -330,7 +348,7 @@ public class ExtendedFile extends File {
      * @return 파일의 크기
      * @throws SecurityException – 파일 및 디렉터리 접근 권한이 없으면 던져짐
      */
-    public String getSize(boolean isHumanReadable) throws SecurityException {
+    @NonNull public String getSize(boolean isHumanReadable) throws SecurityException {
         long fileSize = this.length();
         if (isHumanReadable) {
             String suffix;
@@ -429,7 +447,7 @@ public class ExtendedFile extends File {
     }
 
     // 선택한 해시 알고리즘을 ExtendedFile.EHash로 변환
-    private EHash selectHashAlgorithm(@NonNull String hash) {
+    @NonNull private EHash selectHashAlgorithm(@NonNull String hash) {
         switch (hash) {
             case "CRC32":
             case "crc32":
@@ -504,7 +522,7 @@ public class ExtendedFile extends File {
     }
 
     // 선택한 해시 알고리즘을 dev.retrotv.crypto.enums.EHash로 변환
-    private dev.retrotv.crypto.hash.enums.EHash selectHashAlgorithm(@NonNull EHash hash) {
+    @NonNull private dev.retrotv.crypto.hash.enums.EHash selectHashAlgorithm(@NonNull EHash hash) {
         switch (hash) {
             case CRC32:
                 return dev.retrotv.crypto.hash.enums.EHash.CRC32;
