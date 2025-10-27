@@ -21,4 +21,4 @@ jobs:
           java-version: ${{ matrix.java }}
 
       - name: Run tests
-        run: ./gradlew test -PtargetJava=${{ matrix.java }} --no-daemon
+        run: ./gradlew test -PcompatibilityTest=true -PtargetJava=${{ matrix.java }} --no-daemon
