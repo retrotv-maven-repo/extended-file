@@ -212,8 +212,13 @@ class ExtendedFileTest {
         ExtendedFile file = new ExtendedFile(Objects.requireNonNull(extensionFile).toURI());
         assertEquals("txt", file.getExtension());
 
-        ExtendedFile file2 = new ExtendedFile(Objects.requireNonNull(extensionFile2).toURI());
-        assertEquals("tar.gz", file2.getExtension());
+        // 복합 확장자 테스트
+        ExtendedFile file21 = new ExtendedFile(Objects.requireNonNull(extensionFile2).toURI());
+        assertEquals("tar.gz", file21.getCompoundExtension());
+
+        // 일반 확장자 테스트
+        ExtendedFile file22 = new ExtendedFile(Objects.requireNonNull(extensionFile2).toURI());
+        assertEquals("gz", file22.getExtension());
 
         ExtendedFile file3 = new ExtendedFile(Objects.requireNonNull(textFile).toURI());
         assertEquals("", file3.getExtension());
