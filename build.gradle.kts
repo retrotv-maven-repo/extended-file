@@ -20,7 +20,7 @@ java {
 }
 
 group = "dev.retrotv"
-version = "1.6.1"
+version = "1.7.0"
 
 // Github Action 버전 출력용
 tasks.register("printVersionName") {

@@ -96,7 +96,7 @@ public class ExtendedFile extends File {
      * 확장자가 없거나 해당 경로가 디렉터리인 경우, 빈 문자열을 반환합니다.
      *
      * @author yjj8353
-     * @since 1.0.0
+     * @since 1.7.0
      * @return 파일 확장자
      */
     @NonNull public String getCompoundExtension() {
@@ -131,6 +131,27 @@ public class ExtendedFile extends File {
             return this.getName();
         } else {
             return this.getName().replace("." + this.getExtension(), "");
+        }
+    }
+
+    /**
+     * 파일 및 디렉터리명을 반환합니다.
+     * removeExtension 매개변수를 true로 설정하면, 확장자를 제거한 파일명을 반환합니다.
+     * 해당 경로가 디렉터리인 경우, isRemoveExtension 매개변수의 값과 관계없이 디렉터리명을 반환합니다.
+     *
+     * @author yjj8353
+     * @since 1.7.0
+     * @param removeExtension 확장자 제거 여부
+     * @param isCompoundedExtension 복합 확장자 여부
+     * @return 파일명
+     * @throws SecurityException 파일 및 디렉터리 접근 권한이 없으면 던져짐
+     */
+    @NonNull public String getName(boolean removeExtension, boolean isCompoundedExtension) {
+        if (this.isDirectory() || !removeExtension) {
+            return this.getName();
+        } else {
+            return isCompoundedExtension ? this.getName().replace("." + this.getCompoundExtension(), "")
+                                        : this.getName().replace("." + this.getExtension(), "");
         }
     }
 

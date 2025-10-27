@@ -43,8 +43,9 @@ class ExtendedFileTest {
         assertEquals("extension.txt", file2.getName(false));
 
         ExtendedFile file3 = new ExtendedFile(Objects.requireNonNull(extensionFile2).toURI());
-        assertEquals("extension", file3.getName(true));
+        assertEquals("extension.tar", file3.getName(true));
         assertEquals("extension.tar.gz", file3.getName(false));
+        assertEquals("extension", file3.getName(true, true));
     }
 
     private final URL wordFile = getClass().getClassLoader().getResource("test.docx");
