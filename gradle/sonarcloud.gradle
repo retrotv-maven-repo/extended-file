@@ -1,5 +1,3 @@
-apply plugin: "org.sonarqube"
-
 sonar {
     properties {
         property("sonar.projectKey", "retrotv-maven-repo_extended-file")
