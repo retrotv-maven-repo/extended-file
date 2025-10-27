@@ -2,8 +2,20 @@ plugins {
     id("java")
     id("jacoco")
     id("maven-publish")
-    id("com.vanniktech.maven.publish") version "0.34.0" apply false
-    id("org.sonarqube") version "4.0.0.2929" apply false
+}
+
+buildscript {
+    val isCompatibilityTest = findProperty("compatibilityTest")?.toString()?.toBoolean() ?: false
+    if (!isCompatibilityTest) {
+        repositories {
+            gradlePluginPortal()
+            mavenCentral()
+        }
+        dependencies {
+            classpath("com.vanniktech:gradle-maven-publish-plugin:0.34.0")
+            classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:4.0.0.2929")
+        }
+    }
 }
 
 tasks.withType<JavaCompile> {
