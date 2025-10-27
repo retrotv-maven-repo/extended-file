@@ -1,11 +1,10 @@
-import com.vanniktech.maven.publish.SonatypeHost
 import java.net.URI
 
 plugins {
     id("java")
     id("jacoco")
     id("maven-publish")
-    id("com.vanniktech.maven.publish") version "0.32.0"
+    id("com.vanniktech.maven.publish") version "0.34.0"
     id("org.sonarqube") version "4.0.0.2929"
 }
 
@@ -71,7 +70,7 @@ dependencies {
 }
 
 mavenPublishing {
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    publishToMavenCentral()
 
     signAllPublications()
 
