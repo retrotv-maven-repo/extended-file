@@ -16,6 +16,7 @@ class ExtendedFileTest {
     private final URL textFileCopy = this.getClass().getClassLoader().getResource("text_file_copy");
     private final URL extensionFile = this.getClass().getClassLoader().getResource("extension.txt");
     private final URL extensionFile2 = this.getClass().getClassLoader().getResource("extension.tar.gz");
+    private final URL directoryFile = this.getClass().getClassLoader().getResource("directory");
 
     @Test
     @DisplayName("getFileHash() 메소드 테스트")
@@ -43,8 +44,12 @@ class ExtendedFileTest {
         assertEquals("extension.txt", file2.getName(false));
 
         ExtendedFile file3 = new ExtendedFile(Objects.requireNonNull(extensionFile2).toURI());
-        assertEquals("extension", file3.getName(true));
+        assertEquals("extension.tar", file3.getName(true));
         assertEquals("extension.tar.gz", file3.getName(false));
+        assertEquals("extension", file3.getName(true, true));
+
+        ExtendedFile directory = new ExtendedFile(Objects.requireNonNull(directoryFile).toURI());
+        assertEquals("directory", directory.getName());
     }
 
     private final URL wordFile = getClass().getClassLoader().getResource("test.docx");
@@ -212,11 +217,19 @@ class ExtendedFileTest {
         ExtendedFile file = new ExtendedFile(Objects.requireNonNull(extensionFile).toURI());
         assertEquals("txt", file.getExtension());
 
-        ExtendedFile file2 = new ExtendedFile(Objects.requireNonNull(extensionFile2).toURI());
-        assertEquals("tar.gz", file2.getExtension());
+        // 복합 확장자 테스트
+        ExtendedFile file21 = new ExtendedFile(Objects.requireNonNull(extensionFile2).toURI());
+        assertEquals("tar.gz", file21.getCompoundExtension());
+
+        // 일반 확장자 테스트
+        ExtendedFile file22 = new ExtendedFile(Objects.requireNonNull(extensionFile2).toURI());
+        assertEquals("gz", file22.getExtension());
 
         ExtendedFile file3 = new ExtendedFile(Objects.requireNonNull(textFile).toURI());
         assertEquals("", file3.getExtension());
+
+        ExtendedFile directory = new ExtendedFile(Objects.requireNonNull(directoryFile).toURI());
+        assertEquals("", directory.getExtension());
     }
 
     @Nested

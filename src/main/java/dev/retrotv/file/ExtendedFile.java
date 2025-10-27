@@ -91,6 +91,19 @@ public class ExtendedFile extends File {
     }
 
     /**
+     * 파일의 복합 확장자를 반환합니다. (EX: tar.gz)
+     * 해당 메서드는 가장 처음의 점(.) 이후의 모든 문자열을 확장자로 간주합니다.
+     * 확장자가 없거나 해당 경로가 디렉터리인 경우, 빈 문자열을 반환합니다.
+     *
+     * @author yjj8353
+     * @since 1.7.0
+     * @return 파일 확장자
+     */
+    @NonNull public String getCompoundExtension() {
+        return getExtension(true);
+    }
+
+    /**
      * 파일 확장자를 반환합니다.
      * 확장자가 없거나 해당 경로가 디렉터리인 경우, 빈 문자열을 반환합니다.
      *
@@ -99,17 +112,7 @@ public class ExtendedFile extends File {
      * @return 파일 확장자
      */
     @NonNull public String getExtension() {
-        if (this.isDirectory()) {
-            return "";
-        }
-
-        String name = this.getName();
-        int firstIndex = name.indexOf('.');
-        if (firstIndex == -1 || firstIndex == name.length() - 1) {
-            return "";
-        }
-
-        return name.substring(firstIndex + 1);
+        return getExtension(false);
     }
 
     /**
@@ -124,10 +127,27 @@ public class ExtendedFile extends File {
      * @throws SecurityException 파일 및 디렉터리 접근 권한이 없으면 던져짐
      */
     @NonNull public String getName(boolean removeExtension) {
+        return this.getName(removeExtension, false);
+    }
+
+    /**
+     * 파일 및 디렉터리명을 반환합니다.
+     * removeExtension 매개변수를 true로 설정하면, 확장자를 제거한 파일명을 반환합니다.
+     * 해당 경로가 디렉터리인 경우, isRemoveExtension 매개변수의 값과 관계없이 디렉터리명을 반환합니다.
+     *
+     * @author yjj8353
+     * @since 1.7.0
+     * @param removeExtension 확장자 제거 여부
+     * @param isCompoundedExtension 복합 확장자 여부
+     * @return 파일명
+     * @throws SecurityException 파일 및 디렉터리 접근 권한이 없으면 던져짐
+     */
+    @NonNull public String getName(boolean removeExtension, boolean isCompoundedExtension) {
         if (this.isDirectory() || !removeExtension) {
             return this.getName();
         } else {
-            return this.getName().replace("." + this.getExtension(), "");
+            return isCompoundedExtension ? this.getName().replace("." + this.getCompoundExtension(), "")
+                                         : this.getName().replace("." + this.getExtension(), "");
         }
     }
 
@@ -404,6 +424,21 @@ public class ExtendedFile extends File {
                 return rmDirectory(this);
             }
         }
+    }
+
+    // 확장자명을 반환 (isCompound가 true일 경우 복합 확장자 반환)
+    private String getExtension(boolean isCompound) {
+        if (this.isDirectory()) {
+            return "";
+        }
+
+        String name = this.getName();
+        int firstIndex = name.indexOf('.');
+        if (firstIndex == -1 || firstIndex == name.length() - 1) {
+            return "";
+        }
+
+        return isCompound ? name.substring(firstIndex + 1) : name.substring(name.lastIndexOf('.') + 1);
     }
 
     // 파일 혹은 빈 디렉터리 삭제
