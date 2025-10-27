@@ -16,6 +16,7 @@ class ExtendedFileTest {
     private final URL textFileCopy = this.getClass().getClassLoader().getResource("text_file_copy");
     private final URL extensionFile = this.getClass().getClassLoader().getResource("extension.txt");
     private final URL extensionFile2 = this.getClass().getClassLoader().getResource("extension.tar.gz");
+    private final URL directoryFile = this.getClass().getClassLoader().getResource("directory");
 
     @Test
     @DisplayName("getFileHash() 메소드 테스트")
@@ -46,6 +47,9 @@ class ExtendedFileTest {
         assertEquals("extension.tar", file3.getName(true));
         assertEquals("extension.tar.gz", file3.getName(false));
         assertEquals("extension", file3.getName(true, true));
+
+        ExtendedFile directory = new ExtendedFile(Objects.requireNonNull(directoryFile).toURI());
+        assertEquals("directory", directory.getName());
     }
 
     private final URL wordFile = getClass().getClassLoader().getResource("test.docx");
@@ -223,6 +227,9 @@ class ExtendedFileTest {
 
         ExtendedFile file3 = new ExtendedFile(Objects.requireNonNull(textFile).toURI());
         assertEquals("", file3.getExtension());
+
+        ExtendedFile directory = new ExtendedFile(Objects.requireNonNull(directoryFile).toURI());
+        assertEquals("", directory.getExtension());
     }
 
     @Nested

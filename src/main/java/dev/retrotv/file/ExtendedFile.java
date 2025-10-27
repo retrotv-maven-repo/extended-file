@@ -127,11 +127,7 @@ public class ExtendedFile extends File {
      * @throws SecurityException 파일 및 디렉터리 접근 권한이 없으면 던져짐
      */
     @NonNull public String getName(boolean removeExtension) {
-        if (this.isDirectory() || !removeExtension) {
-            return this.getName();
-        } else {
-            return this.getName().replace("." + this.getExtension(), "");
-        }
+        return this.getName(removeExtension, false);
     }
 
     /**
@@ -151,7 +147,7 @@ public class ExtendedFile extends File {
             return this.getName();
         } else {
             return isCompoundedExtension ? this.getName().replace("." + this.getCompoundExtension(), "")
-                                        : this.getName().replace("." + this.getExtension(), "");
+                                         : this.getName().replace("." + this.getExtension(), "");
         }
     }
 
