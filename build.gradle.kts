@@ -4,8 +4,8 @@ plugins {
     id("java")
     id("jacoco")
     id("maven-publish")
-    id("com.vanniktech.maven.publish") version "0.34.0"
-    id("org.sonarqube") version "4.0.0.2929"
+    id("com.vanniktech.maven.publish") version "0.34.0" apply false
+    id("org.sonarqube") version "4.0.0.2929" apply false
 }
 
 tasks.withType<JavaCompile> {
@@ -69,64 +69,8 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
-mavenPublishing {
-    publishToMavenCentral()
-
-    signAllPublications()
-
-    coordinates(group.toString(), project.name, version.toString())
-
-    pom {
-        name.set("extended-file")
-        description.set("Java의 File 클래스를 확장한 라이브러리 입니다.")
-        inceptionYear.set("2025")
-        url.set("https://github.com/retrotv-maven-repo/extended-file")
-
-        licenses {
-            license {
-                name.set("The Apache License, Version 2.0")
-                url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
-            }
-        }
-
-        developers {
-            developer {
-                id.set("yjj8353")
-                name.set("JaeJun Yang")
-                email.set("yjj8353@gmail.com")
-            }
-        }
-
-        scm {
-            connection.set("scm:git:git://github.com/retrotv-maven-repo/extended-file.git")
-            developerConnection.set("scm:git:ssh://github.com/retrotv-maven-repo/extended-file.git")
-            url.set("https://github.com/retrotv-maven-repo/extended-file.git")
-        }
-    }
-
-    publishing {
-        repositories {
-
-            // Github Packages에 배포하기 위한 설정
-            maven {
-                name = "GitHubPackages"
-                url = URI("https://maven.pkg.github.com/retrotv-maven-repo/extended-file")
-                credentials {
-                    username = System.getenv("USERNAME")
-                    password = System.getenv("PASSWORD")
-                }
-            }
-        }
-    }
+val targetJavaProp = (findProperty("targetJava") as? String)?.trim()
+if (targetJavaProp == null) {
+    apply(from = "${rootDir}/gradle/sonarcloud.gradle")
+    apply(from = "${rootDir}/gradle/jacoco.gradle")
 }
-
-tasks.withType<Sign>().configureEach {
-    onlyIf {
-
-        // 로컬 및 깃허브 패키지 배포 시에는 서명하지 않도록 설정
-        !gradle.taskGraph.hasTask(":publishMavenPublicationToMavenLocal") && !gradle.taskGraph.hasTask(":publishMavenPublicationToGitHubPackagesRepository")
-    }
-}
-
-apply(from = "${rootDir}/gradle/sonarcloud.gradle")
-apply(from = "${rootDir}/gradle/jacoco.gradle")
