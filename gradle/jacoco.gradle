@@ -16,21 +16,21 @@ jacocoTestReport {
 
     afterEvaluate {
         classDirectories.setFrom(
-                files(
-                        classDirectories.files.collect {
+            files(
+                classDirectories.files.collect {
 
-                            // 검사 제외
-                            fileTree(
-                                    dir: it,
-                                    excludes: [
-                                            "**/config/*"
-                                            , "**/util/*"
-                                            , "**/exception/**"
-                                            , "**/enums/**"
-                                    ]
-                            )
-                        }
-                )
+                    // 검사 제외
+                    fileTree(
+                        dir: it,
+                        excludes: [
+                              "**/config/*"
+                            , "**/util/*"
+                            , "**/exception/**"
+                            , "**/enums/**"
+                        ]
+                    )
+                }
+            )
         )
     }
 

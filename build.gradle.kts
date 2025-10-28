@@ -4,20 +4,6 @@ plugins {
     id("maven-publish")
 }
 
-buildscript {
-    val isCompatibilityTest = findProperty("compatibilityTest")?.toString()?.toBoolean() ?: false
-    if (!isCompatibilityTest) {
-        repositories {
-            gradlePluginPortal()
-            mavenCentral()
-        }
-        dependencies {
-            classpath("com.vanniktech:gradle-maven-publish-plugin:0.34.0")
-            classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:4.0.0.2929")
-        }
-    }
-}
-
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
 }
@@ -77,6 +63,21 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:${junit}"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+// 이 아래는 호환성 테스트를 제외한 빌드에서만 적용
+buildscript {
+    val isCompatibilityTest = findProperty("compatibilityTest")?.toString()?.toBoolean() ?: false
+    if (!isCompatibilityTest) {
+        repositories {
+            gradlePluginPortal()
+            mavenCentral()
+        }
+        dependencies {
+            classpath("com.vanniktech:gradle-maven-publish-plugin:0.34.0")
+            classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:4.0.0.2929")
+        }
+    }
 }
 
 val isCompatibilityTest = findProperty("compatibilityTest")?.toString()?.toBoolean() ?: false
