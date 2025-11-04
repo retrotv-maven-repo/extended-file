@@ -4,7 +4,7 @@ pluginManagement {
         mavenCentral()
     }
 
-    // compatibilityTest 시스템 속성이 true로 설정된 경우 Foojay 플러그인을 적용하지 않음
+    // 호환성 테스트를 제외한 빌드에서만 적용
     val isCompatibilityTest = System.getProperty("compatibilityTest")?.toBoolean() ?: false
     if (!isCompatibilityTest) {
         plugins {

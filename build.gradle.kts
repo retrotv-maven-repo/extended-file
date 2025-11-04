@@ -83,6 +83,7 @@ buildscript {
     }
 }
 
+// 호환성 테스트를 제외한 빌드에서만 적용
 val isCompatibilityTest = findProperty("compatibilityTest")?.toString()?.toBoolean() ?: false
 if (!isCompatibilityTest) {
     apply(plugin = "com.vanniktech.maven.publish")
