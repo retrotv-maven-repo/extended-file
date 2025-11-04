@@ -8,6 +8,8 @@ tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
 }
 
+
+
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(8))
@@ -26,6 +28,7 @@ tasks.register("printVersionName") {
 
 repositories {
     mavenCentral()
+    gradlePluginPortal()
 }
 
 val cryptography = "0.61.0-alpha"
