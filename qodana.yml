@@ -1,5 +1,4 @@
 version: "1.0"
 linter: jetbrains/qodana-jvm-community:latest # Or a specific version like 2023.1
-projectJDK: 21
 profile:
   name: qodana.recommended
