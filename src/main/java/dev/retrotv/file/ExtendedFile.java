@@ -368,7 +368,7 @@ public class ExtendedFile extends File {
      * @return 파일의 크기
      * @throws SecurityException – 파일 및 디렉터리 접근 권한이 없으면 던져짐
      */
-    @NonNull public String getSize(boolean isHumanReadable) throws SecurityException {
+    @NonNull public strictfp String getSize(boolean isHumanReadable) throws SecurityException {
         long fileSize = this.length();
         if (isHumanReadable) {
             String suffix;
@@ -447,12 +447,14 @@ public class ExtendedFile extends File {
             return false;
         }
 
+        boolean result = true;
         try {
             Files.delete(file.toPath());
-            return true;
         } catch (IOException | SecurityException e) {
-            return false;
+            result = false;
         }
+
+        return result;
     }
 
     // 디렉터리 삭제 (내부에 파일이나 디렉터리가 있을 경우 재귀적으로 삭제)
