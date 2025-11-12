@@ -76,7 +76,7 @@ buildscript {
         }
         dependencies {
             classpath("com.vanniktech:gradle-maven-publish-plugin:0.34.0")
-            classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:4.0.0.2929")
+            classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:7.0.1.6134")
         }
     }
 }
