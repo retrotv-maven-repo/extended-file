@@ -1,7 +1,7 @@
 mavenPublishing {
     publishToMavenCentral()
     signAllPublications()
-    coordinates(group.toString(), project.name, version.toString())
+    coordinates(group.toString(), project.name, version as String)
 
     pom {
         name = "extended-file"

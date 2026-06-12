@@ -7,6 +7,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -379,6 +380,110 @@ class ExtendedFileTest {
             ExtendedFile testInnerInnerFile5 = new ExtendedFile("./src/test/resources/delete_test_directory/delete_test_directory/delete_test_directory/delete_test_file5");
             assertTrue(testInnerInnerFile5.isFile());
             assertTrue(testInnerInnerFile5.exists());
+        }
+    }
+
+    @Nested
+    @DisplayName("ListFilesRecursively 메서드 테스트")
+    class ListFilesRecursivelyTest {
+
+        @Test
+        @DisplayName("listFilesRecursively() 메서드 - 제한 없이 모든 파일 및 디렉터리 반환")
+        void test_listFilesRecursively_noDepth() throws URISyntaxException {
+            String resourcePath = Objects.requireNonNull(directoryFile).toURI().getPath();
+            ExtendedFile directory = new ExtendedFile(resourcePath);
+
+            List<ExtendedFile> files = directory.walkFiles();
+
+            assertNotNull(files);
+            assertFalse(files.isEmpty());
+
+            // 결과 출력 (테스트용)
+            System.out.println("=== listFilesRecursively() 결과 ===");
+            System.out.println("총 파일/디렉터리 개수: " + files.size());
+            files.forEach(f -> System.out.println(f.getAbsolutePath()));
+        }
+
+        @Test
+        @DisplayName("listFilesRecursively(int depth) 메서드 - 깊이 제한 1")
+        void test_listFilesRecursively_depth1() throws URISyntaxException {
+            String resourcePath = Objects.requireNonNull(directoryFile).toURI().getPath();
+            ExtendedFile directory = new ExtendedFile(resourcePath);
+
+            List<ExtendedFile> files = directory.walkFiles(1);
+
+            assertNotNull(files);
+            assertFalse(files.isEmpty());
+
+            // 깊이 1 제한 시 결과 출력 (테스트용)
+            System.out.println("\n=== listFilesRecursively(1) 결과 ===");
+            System.out.println("총 파일/디렉터리 개수: " + files.size());
+            files.forEach(f -> System.out.println(f.getAbsolutePath()));
+        }
+
+        @Test
+        @DisplayName("listFilesRecursively(int depth) 메서드 - 깊이 제한 2")
+        void test_listFilesRecursively_depth2() throws URISyntaxException {
+            String resourcePath = Objects.requireNonNull(directoryFile).toURI().getPath();
+            ExtendedFile directory = new ExtendedFile(resourcePath);
+
+            List<ExtendedFile> files = directory.walkFiles(2);
+
+            assertNotNull(files);
+            assertFalse(files.isEmpty());
+
+            // 깊이 2 제한 시 결과 출력 (테스트용)
+            System.out.println("\n=== listFilesRecursively(2) 결과 ===");
+            System.out.println("총 파일/디렉터리 개수: " + files.size());
+            files.forEach(f -> System.out.println(f.getAbsolutePath()));
+        }
+
+        @Test
+        @DisplayName("listFilesRecursively() 메서드 - 단일 파일 경로")
+        void test_listFilesRecursively_file() throws URISyntaxException {
+            ExtendedFile file = new ExtendedFile(Objects.requireNonNull(textFile).toURI());
+
+            List<ExtendedFile> files = file.walkFiles();
+
+            assertNotNull(files);
+            assertEquals(1, files.size());
+            assertEquals(file.getAbsolutePath(), files.get(0).getAbsolutePath());
+
+            System.out.println("\n=== 단일 파일 경로 테스트 결과 ===");
+            System.out.println("반환된 파일: " + files.get(0).getAbsolutePath());
+        }
+
+        @Test
+        @DisplayName("listFilesRecursively() 메서드 - directory 폴더")
+        void test_listFilesRecursively_directory() throws URISyntaxException {
+            ExtendedFile directory = new ExtendedFile(Objects.requireNonNull(directoryFile).toURI());
+
+            List<ExtendedFile> files = directory.walkFiles();
+
+            assertNotNull(files);
+            assertFalse(files.isEmpty());
+            assertTrue(files.stream().anyMatch(f -> f.getName().equals("directory")));
+
+            System.out.println("\n=== directory 폴더 테스트 결과 ===");
+            System.out.println("총 파일/디렉터리 개수: " + files.size());
+            files.forEach(f -> System.out.println("  - " + f.getName() + " (파일: " + f.isFile() + ")"));
+        }
+
+        @Test
+        @DisplayName("listFilesRecursively() 메서드 - 깊이 제한 0 (루트만)")
+        void test_listFilesRecursively_depth0() throws URISyntaxException {
+            String resourcePath = Objects.requireNonNull(directoryFile).toURI().getPath();
+            ExtendedFile directory = new ExtendedFile(resourcePath);
+
+            List<ExtendedFile> files = directory.walkFiles(0);
+
+            assertNotNull(files);
+            // 깊이 0이므로 루트 디렉터리만 반환되어야 함
+            assertEquals(1, files.size());
+            assertEquals(directory.getAbsolutePath(), files.get(0).getAbsolutePath());
+
+            System.out.println("\n=== listFilesRecursively(0) 결과 (루트만) ===");
+            files.forEach(f -> System.out.println(f.getAbsolutePath()));
         }
     }
 }

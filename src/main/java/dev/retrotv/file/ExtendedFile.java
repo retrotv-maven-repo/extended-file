@@ -11,7 +11,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * [File] 클래스의 기능을 확장한 클래스 입니다.
@@ -426,176 +428,248 @@ public class ExtendedFile extends File {
         }
     }
 
-    // 확장자명을 반환 (isCompound가 true일 경우 복합 확장자 반환)
-    private String getExtension(boolean isCompound) {
-        if (this.isDirectory()) {
-            return "";
-        }
+     /**
+      * 특정 경로의 내부 내용을 회귀적으로 반환합니다.
+      * 해당 경로가 디렉터리인 경우, 내부의 모든 파일과 디렉터리를 재귀적으로 반환합니다.
+      * 파일인 경우, 해당 파일만 포함된 리스트를 반환합니다.
+      *
+      * @author yjj8353
+      * @since 1.8.0
+      * @return 경로 내부의 모든 파일 및 디렉터리를 포함하는 리스트
+      * @throws SecurityException 파일 및 디렉터리 접근 권한이 없으면 던져짐
+      */
+     @NonNull public List<ExtendedFile> walkFiles() throws SecurityException {
+         List<ExtendedFile> result = new ArrayList<>();
+         walkFiles(this, result);
 
-        String name = this.getName();
-        int firstIndex = name.indexOf('.');
-        if (firstIndex == -1 || firstIndex == name.length() - 1) {
-            return "";
-        }
+         return result;
+     }
 
-        return isCompound ? name.substring(firstIndex + 1) : name.substring(name.lastIndexOf('.') + 1);
-    }
+     /**
+      * 특정 경로의 내부 내용을 회귀적으로 반환합니다. (깊이 우선 탐색)
+      * 디렉터리는 내부 파일/디렉터리를 모두 반환한 후에 리스트에 추가됩니다.
+      *
+      * @author yjj8353
+      * @since 1.8.0
+      * @param depth 깊이 제한 (-1이면 제한 없음)
+      * @return 경로 내부의 모든 파일 및 디렉터리를 포함하는 리스트
+      * @throws SecurityException 파일 및 디렉터리 접근 권한이 없으면 던져짐
+      */
+     @NonNull public List<ExtendedFile> walkFiles(int depth) throws SecurityException {
+         List<ExtendedFile> result = new ArrayList<>();
+         walkFilesWithDepth(this, result, depth, 0);
 
-    // 파일 혹은 빈 디렉터리 삭제
-    private boolean rmFile(@NonNull File file) {
-        if (!file.exists()) {
-            return false;
-        }
+         return result;
+     }
 
-        boolean result = true;
-        try {
-            Files.delete(file.toPath());
-        } catch (IOException | SecurityException e) {
-            result = false;
-        }
+     // 회귀적으로 파일 리스트를 구성하는 헬퍼 메서드
+     private void walkFiles(@NonNull File file, @NonNull List<ExtendedFile> result) {
+         if (!file.exists()) {
+             return;
+         }
 
-        return result;
-    }
+         if (file.isFile()) {
+             result.add(new ExtendedFile(file.getAbsolutePath()));
+         } else if (file.isDirectory()) {
+             File[] files = file.listFiles();
+             if (files != null) {
+                 for (File childFile : files) {
+                     walkFiles(childFile, result);
+                 }
+             }
+             result.add(new ExtendedFile(file.getAbsolutePath()));
+         }
+     }
 
-    // 디렉터리 삭제 (내부에 파일이나 디렉터리가 있을 경우 재귀적으로 삭제)
-    private boolean rmDirectory(@NonNull File file) {
-        if (!file.exists() || !file.isDirectory()) {
-            return false;
-        }
+     // 깊이 제한이 있는 회귀적 파일 리스트 구성 헬퍼 메서드
+     private void walkFilesWithDepth(@NonNull File file, @NonNull List<ExtendedFile> result, int maxDepth, int currentDepth) {
+         if (!file.exists() || (maxDepth != -1 && currentDepth > maxDepth)) {
+             return;
+         }
 
-        // 해당 디렉터리의 모든 파일 및 디렉터리 정보를 가져옴
-        File[] deleteDirectoryList = file.listFiles();
-        if (!deleteRecursively(deleteDirectoryList)) {
-            return false;
-        }
+         if (file.isFile()) {
+             result.add(new ExtendedFile(file.getAbsolutePath()));
+         } else if (file.isDirectory()) {
+             File[] files = file.listFiles();
+             if (files != null) {
+                 for (File childFile : files) {
+                     walkFilesWithDepth(childFile, result, maxDepth, currentDepth + 1);
+                 }
+             }
+             result.add(new ExtendedFile(file.getAbsolutePath()));
+         }
+     }
 
-        // 해당 디렉터리 삭제
-        return rmFile(file);
-    }
+     // 확장자명을 반환 (isCompound가 true일 경우 복합 확장자 반환)
+     private String getExtension(boolean isCompound) {
+         if (this.isDirectory()) {
+             return "";
+         }
 
-    // 파일/디렉터리 리스트를 재귀적으로 삭제
-    private boolean deleteRecursively(@NonNull File[] files) {
-        for (File childFile : files) {
-            if (childFile.isFile()) {
-                if (!rmFile(childFile)) {
-                    return false;
-                }
-            } else {
-                if (!rmDirectory(childFile)) {
-                    return false;
-                }
-            }
-        }
+         String name = this.getName();
+         int firstIndex = name.indexOf('.');
+         if (firstIndex == -1 || firstIndex == name.length() - 1) {
+             return "";
+         }
 
-        return true;
-    }
+         return isCompound ? name.substring(firstIndex + 1) : name.substring(name.lastIndexOf('.') + 1);
+     }
 
-    // 선택한 해시 알고리즘을 ExtendedFile.EHash로 변환
-    @NonNull private EHash selectHashAlgorithm(@NonNull String hash) {
-        switch (hash) {
-            case "CRC32":
-            case "crc32":
-            case "CRC-32":
-            case "crc-32":
-                return EHash.CRC32;
-            case "MD5":
-            case "md5":
-                return EHash.MD5;
-            case "SHA-1":
-            case "sha-1":
-            case "SHA1":
-            case "sha1":
-                return EHash.SHA1;
-            case "SHA-224":
-            case "sha-224":
-            case "SHA224":
-            case "sha224":
-                return EHash.SHA224;
-            case "SHA-256":
-            case "sha-256":
-            case "SHA256":
-            case "sha256":
-                return EHash.SHA256;
-            case "SHA-384":
-            case "sha-384":
-            case "SHA384":
-            case "sha384":
-                return EHash.SHA384;
-            case "SHA-512":
-            case "sha-512":
-            case "SHA512":
-            case "sha512":
-                return EHash.SHA512;
-            case "SHA-512/224":
-            case "SHA-512224":
-            case "sha-512224":
-            case "sha-512/224":
-            case "SHA512224":
-            case "sha512224":
-                return EHash.SHA512224;
-            case "SHA-512/256":
-            case "SHA-512256":
-            case "sha-512256":
-            case "sha-512/256":
-            case "SHA512256":
-            case "sha512256":
-                return EHash.SHA512256;
-            case "SHA3-224":
-            case "sha3-224":
-            case "SHA3224":
-            case "sha3224":
-                return EHash.SHA3224;
-            case "SHA3-256":
-            case "sha3-256":
-            case "SHA3256":
-            case "sha3256":
-                return EHash.SHA3256;
-            case "SHA3-384":
-            case "sha3-384":
-            case "SHA3384":
-            case "sha3384":
-                return EHash.SHA3384;
-            case "SHA3-512":
-            case "sha3-512":
-            case "SHA3512":
-            case "sha3512":
-                return EHash.SHA3512;
-            default:
-                throw new IllegalArgumentException("지원하지 않는 해시 알고리즘입니다: " + hash);
-        }
-    }
+     // 파일 혹은 빈 디렉터리 삭제
+     private boolean rmFile(@NonNull File file) {
+         if (!file.exists()) {
+             return false;
+         }
 
-    // 선택한 해시 알고리즘을 dev.retrotv.crypto.enums.EHash로 변환
-    @NonNull private dev.retrotv.crypto.hash.enums.EHash selectHashAlgorithm(@NonNull EHash hash) {
-        switch (hash) {
-            case CRC32:
-                return dev.retrotv.crypto.hash.enums.EHash.CRC32;
-            case MD5:
-                return dev.retrotv.crypto.hash.enums.EHash.MD5;
-            case SHA1:
-                return dev.retrotv.crypto.hash.enums.EHash.SHA1;
-            case SHA224:
-                return dev.retrotv.crypto.hash.enums.EHash.SHA224;
-            case SHA256:
-                return dev.retrotv.crypto.hash.enums.EHash.SHA256;
-            case SHA384:
-                return dev.retrotv.crypto.hash.enums.EHash.SHA384;
-            case SHA512:
-                return dev.retrotv.crypto.hash.enums.EHash.SHA512;
-            case SHA512224:
-                return dev.retrotv.crypto.hash.enums.EHash.SHA512224;
-            case SHA512256:
-                return dev.retrotv.crypto.hash.enums.EHash.SHA512256;
-            case SHA3224:
-                return dev.retrotv.crypto.hash.enums.EHash.SHA3224;
-            case SHA3256:
-                return dev.retrotv.crypto.hash.enums.EHash.SHA3256;
-            case SHA3384:
-                return dev.retrotv.crypto.hash.enums.EHash.SHA3384;
-            case SHA3512:
-                return dev.retrotv.crypto.hash.enums.EHash.SHA3512;
-            default:
-                throw new IllegalArgumentException("지원하지 않는 해시 알고리즘입니다: " + hash);
-        }
-    }
+         boolean result = true;
+         try {
+             Files.delete(file.toPath());
+         } catch (IOException | SecurityException e) {
+             result = false;
+         }
+
+         return result;
+     }
+
+     // 디렉터리 삭제 (내부에 파일이나 디렉터리가 있을 경우 재귀적으로 삭제)
+     private boolean rmDirectory(@NonNull File file) {
+         if (!file.exists() || !file.isDirectory()) {
+             return false;
+         }
+
+         // 해당 디렉터리의 모든 파일 및 디렉터리 정보를 가져옴
+         File[] deleteDirectoryList = file.listFiles();
+         if (!deleteRecursively(deleteDirectoryList)) {
+             return false;
+         }
+
+         // 해당 디렉터리 삭제
+         return rmFile(file);
+     }
+
+     // 파일/디렉터리 리스트를 재귀적으로 삭제
+     private boolean deleteRecursively(@NonNull File[] files) {
+         for (File childFile : files) {
+             if (childFile.isFile()) {
+                 if (!rmFile(childFile)) {
+                     return false;
+                 }
+             } else {
+                 if (!rmDirectory(childFile)) {
+                     return false;
+                 }
+             }
+         }
+
+         return true;
+     }
+
+     // 선택한 해시 알고리즘을 ExtendedFile.EHash로 변환
+     @NonNull private EHash selectHashAlgorithm(@NonNull String hash) {
+         switch (hash) {
+             case "CRC32":
+             case "crc32":
+             case "CRC-32":
+             case "crc-32":
+                 return EHash.CRC32;
+             case "MD5":
+             case "md5":
+                 return EHash.MD5;
+             case "SHA-1":
+             case "sha-1":
+             case "SHA1":
+             case "sha1":
+                 return EHash.SHA1;
+             case "SHA-224":
+             case "sha-224":
+             case "SHA224":
+             case "sha224":
+                 return EHash.SHA224;
+             case "SHA-256":
+             case "sha-256":
+             case "SHA256":
+             case "sha256":
+                 return EHash.SHA256;
+             case "SHA-384":
+             case "sha-384":
+             case "SHA384":
+             case "sha384":
+                 return EHash.SHA384;
+             case "SHA-512":
+             case "sha-512":
+             case "SHA512":
+             case "sha512":
+                 return EHash.SHA512;
+             case "SHA-512/224":
+             case "SHA-512224":
+             case "sha-512224":
+             case "sha-512/224":
+             case "SHA512224":
+             case "sha512224":
+                 return EHash.SHA512224;
+             case "SHA-512/256":
+             case "SHA-512256":
+             case "sha-512256":
+             case "sha-512/256":
+             case "SHA512256":
+             case "sha512256":
+                 return EHash.SHA512256;
+             case "SHA3-224":
+             case "sha3-224":
+             case "SHA3224":
+             case "sha3224":
+                 return EHash.SHA3224;
+             case "SHA3-256":
+             case "sha3-256":
+             case "SHA3256":
+             case "sha3256":
+                 return EHash.SHA3256;
+             case "SHA3-384":
+             case "sha3-384":
+             case "SHA3384":
+             case "sha3384":
+                 return EHash.SHA3384;
+             case "SHA3-512":
+             case "sha3-512":
+             case "SHA3512":
+             case "sha3512":
+                 return EHash.SHA3512;
+             default:
+                 throw new IllegalArgumentException("지원하지 않는 해시 알고리즘입니다: " + hash);
+         }
+     }
+
+     // 선택한 해시 알고리즘을 dev.retrotv.crypto.enums.EHash로 변환
+     @NonNull private dev.retrotv.crypto.hash.enums.EHash selectHashAlgorithm(@NonNull EHash hash) {
+         switch (hash) {
+             case CRC32:
+                 return dev.retrotv.crypto.hash.enums.EHash.CRC32;
+             case MD5:
+                 return dev.retrotv.crypto.hash.enums.EHash.MD5;
+             case SHA1:
+                 return dev.retrotv.crypto.hash.enums.EHash.SHA1;
+             case SHA224:
+                 return dev.retrotv.crypto.hash.enums.EHash.SHA224;
+             case SHA256:
+                 return dev.retrotv.crypto.hash.enums.EHash.SHA256;
+             case SHA384:
+                 return dev.retrotv.crypto.hash.enums.EHash.SHA384;
+             case SHA512:
+                 return dev.retrotv.crypto.hash.enums.EHash.SHA512;
+             case SHA512224:
+                 return dev.retrotv.crypto.hash.enums.EHash.SHA512224;
+             case SHA512256:
+                 return dev.retrotv.crypto.hash.enums.EHash.SHA512256;
+             case SHA3224:
+                 return dev.retrotv.crypto.hash.enums.EHash.SHA3224;
+             case SHA3256:
+                 return dev.retrotv.crypto.hash.enums.EHash.SHA3256;
+             case SHA3384:
+                 return dev.retrotv.crypto.hash.enums.EHash.SHA3384;
+             case SHA3512:
+                 return dev.retrotv.crypto.hash.enums.EHash.SHA3512;
+             default:
+                 throw new IllegalArgumentException("지원하지 않는 해시 알고리즘입니다: " + hash);
+         }
+     }
 }
