@@ -30,18 +30,18 @@ mavenPublishing {
             url = "https://github.com/retrotv-maven-repo/extended-file.git"
         }
     }
-}
 
-publishing {
-    repositories {
+    publishing {
+        repositories {
 
-        // Github Packages에 배포하기 위한 설정
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/retrotv-maven-repo/extended-file")
-            credentials {
-                username = System.getenv("USERNAME")
-                password = System.getenv("PASSWORD")
+            // Github Packages에 배포하기 위한 설정
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/retrotv-maven-repo/extended-file")
+                credentials {
+                    username = System.getenv("USERNAME")
+                    password = System.getenv("PASSWORD")
+                }
             }
         }
     }
