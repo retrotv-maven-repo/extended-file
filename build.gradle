@@ -41,7 +41,7 @@ tasks.withType(Javadoc).configureEach {
 }
 
 group = 'dev.retrotv'
-version = '1.7.0'
+version = '1.7.1'
 
 // Github Action 버전 출력용
 tasks.register('printVersionName') {

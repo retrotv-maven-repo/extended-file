@@ -465,22 +465,29 @@ public class ExtendedFile extends File {
 
         // 해당 디렉터리의 모든 파일 및 디렉터리 정보를 가져옴
         File[] deleteDirectoryList = file.listFiles();
-        if (deleteDirectoryList != null) {
-            for (File childFile : deleteDirectoryList) {
-                if (childFile.isFile()) {
-                    if (!rmFile(childFile)) {
-                        return false;
-                    }
-                } else {
-                    if (!rmDirectory(childFile)) {
-                        return false;
-                    }
-                }
-            }
+        if (!deleteRecursively(deleteDirectoryList)) {
+            return false;
         }
 
         // 해당 디렉터리 삭제
         return rmFile(file);
+    }
+
+    // 파일/디렉터리 리스트를 재귀적으로 삭제
+    private boolean deleteRecursively(@NonNull File[] files) {
+        for (File childFile : files) {
+            if (childFile.isFile()) {
+                if (!rmFile(childFile)) {
+                    return false;
+                }
+            } else {
+                if (!rmDirectory(childFile)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     // 선택한 해시 알고리즘을 ExtendedFile.EHash로 변환
