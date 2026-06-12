@@ -1,24 +1,33 @@
-# name: CI
-# on: 
-#   push:
-#     branches:
-#       - main
+name: CI
+on:
+  push:
+    branches:
+      - main
 
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     strategy:
-#       matrix:
-#         java: [8, 11, 17, 21]
+jobs:
 
-#     steps:
-#       - uses: actions/checkout@v4
+  # JDK 호환성 테스트
+  compatibility-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target-java: [8, 11, 17, 21, 25]
 
-#       - name: Set up JDK
-#         uses: actions/setup-java@v4
-#         with:
-#           distribution: temurin
-#           java-version: ${{ matrix.java }}
+    steps:
+      - uses: actions/checkout@v4
 
-#       - name: Run tests
-#         run: ./gradlew test -PtargetJava=${{ matrix.java }} --no-daemon
+      - name: Set up JDK 25 for Gradle runtime
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: ${{ runner.os }}-gradle
+
+      - name: Run compatibility tests (target Java ${{ matrix.target-java }})
+        run: ./gradlew test -PcompatibilityTest=true -PtargetJava=${{ matrix.target-java }} --no-daemon

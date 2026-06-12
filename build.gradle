@@ -1,0 +1,103 @@
+buildscript {
+    def isCompatibilityTest = project.findProperty('compatibilityTest')?.toString()?.toBoolean() ?: false
+    if (!isCompatibilityTest) {
+        repositories {
+            gradlePluginPortal()
+            mavenCentral()
+        }
+        dependencies {
+            classpath 'com.vanniktech:gradle-maven-publish-plugin:0.36.0'
+            classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:7.0.1.6134'
+        }
+    }
+}
+
+plugins {
+    id 'java'
+    id 'jacoco'
+    id 'maven-publish'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of((project.findProperty('targetJava') ?: '8').toString().toInteger())
+    }
+}
+
+tasks.withType(Javadoc).configureEach {
+    options.with {
+        charSet = 'UTF-8'      // HTML charset
+        encoding = 'UTF-8'     // 소스 읽기 인코딩
+        docEncoding = 'UTF-8'  // 출력 파일 인코딩
+    }
+}
+
+group = 'dev.retrotv'
+version = '1.7.1'
+
+// Github Action 버전 출력용
+tasks.register('printVersionName') {
+    description = '이 프로젝트의 버전을 출력합니다.'
+    group = JavaBasePlugin.DOCUMENTATION_GROUP
+    println project.version
+}
+
+repositories {
+    mavenCentral()
+    gradlePluginPortal()
+}
+
+def cryptography = '0.61.0-alpha'
+def dataUtils = '0.25.0-alpha'
+def lombok = '1.18.42'
+def tika = '2.9.4' // tika 3.0.0 부터 java 11을 요구하므로 바꾸지 말 것
+def poi = '5.4.1'
+def junit = '5.13.4'
+def slf4j = '2.0.18'
+def log4j = '2.26.0'
+
+dependencies {
+    implementation "dev.retrotv:cryptography-core:${cryptography}"
+    implementation "dev.retrotv:cryptography-hash:${cryptography}"
+    implementation "dev.retrotv:data-utils:${dataUtils}"
+
+    // Lombok
+    implementation "org.projectlombok:lombok:${lombok}"
+
+    // Apache Tika
+    implementation "org.apache.tika:tika-core:${tika}"
+    implementation "org.apache.tika:tika-parsers-standard-package:${tika}"
+
+    // Apache POI
+    implementation "org.apache.poi:poi-ooxml:${poi}"
+    implementation "org.apache.poi:poi:${poi}"
+
+    // Logger
+    compileOnly "org.slf4j:slf4j-api:${slf4j}"
+    testImplementation "org.slf4j:slf4j-api:${slf4j}"
+    testImplementation "org.apache.logging.log4j:log4j-core:${log4j}"
+    testImplementation "org.apache.logging.log4j:log4j-slf4j2-impl:${log4j}"
+
+    // JUnit 5
+    testImplementation platform("org.junit:junit-bom:${junit}")
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+// 호환성 테스트를 제외한 빌드에서만 적용
+def isCompatibilityTest = (findProperty('compatibilityTest')?.toString()?.toBoolean()) ?: false
+if (!isCompatibilityTest) {
+    apply plugin: 'com.vanniktech.maven.publish'
+    apply plugin: 'org.sonarqube'
+    apply from: "${rootDir}/gradle/jacoco.gradle"
+    apply from: "${rootDir}/gradle/publish.gradle"
+    apply from: "${rootDir}/gradle/sonarcloud.gradle"
+}
